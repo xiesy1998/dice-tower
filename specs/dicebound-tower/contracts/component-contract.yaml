@@ -1,0 +1,65 @@
+schema_version: 2
+project_id: dicebound-tower
+status: implemented
+format: native-web
+components:
+  - id: primary-button
+    source: style.css
+    implementation: btn
+  - id: tower-illustration
+    source: art.mjs
+    implementation: towerArt
+  - id: progress-record
+    source: app.mjs
+    implementation: homeScreen / resultScreen
+  - id: player-hud
+    source: app.mjs
+    implementation: hud
+  - id: relic-strip
+    source: app.mjs
+    implementation: hud
+  - id: map-grid
+    source: app.mjs
+    implementation: mapScreen / tileContent
+  - id: path-preview
+    source: app.mjs
+    implementation: pickCell / mapScreen
+  - id: die
+    source: app.mjs
+    implementation: diceMarkup
+  - id: explore-card
+    source: app.mjs
+    implementation: explorationCards
+  - id: enemy-portrait
+    source: art.mjs
+    implementation: creature
+  - id: intent-label
+    source: app.mjs
+    implementation: battleScreen
+  - id: health-bar
+    source: app.mjs
+    implementation: healthBar
+  - id: status-chip
+    source: app.mjs
+    implementation: statusChips
+  - id: hand-card
+    source: app.mjs
+    implementation: cardView
+  - id: mana-bar
+    source: app.mjs
+    implementation: battleScreen
+  - id: turn-controls
+    source: app.mjs
+    implementation: battleScreen
+  - id: log
+    source: app.mjs
+    implementation: mapScreen / battleScreen
+  - id: reward-summary
+    source: app.mjs
+    implementation: rewardScreen
+  - id: shop-offer
+    source: app.mjs
+    implementation: shopScreen
+  - id: unlock-offer
+    source: app.mjs
+    implementation: campScreen

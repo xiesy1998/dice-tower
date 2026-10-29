@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1919">
+  <meta name="description" content="骰契之塔：掷骰移动的魔塔卡牌冒险。探索方格地图，收集钥匙宝物，用蓝量与卡组突破敌群，挑战十二层高塔。手机与电脑浏览器即开即玩。">
+  <title>骰契之塔 · Dicebound Tower</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231b3934'/%3E%3Crect x='12' y='12' width='40' height='40' rx='9' fill='%23d8b36b'/%3E%3Ccircle cx='23' cy='23' r='4' fill='%231b3934'/%3E%3Ccircle cx='41' cy='41' r='4' fill='%231b3934'/%3E%3Ccircle cx='32' cy='32' r='4' fill='%231b3934'/%3E%3C/svg%3E">
+  <style>
+@charset "UTF-8";
+:root{color-scheme:dark;--bg:#0b1919;--panel:#132b29;--light:#1c3b35;--ink:#f2ead7;--muted:#a5b8aa;--gold:#d8b36b;--line:#a6b39126;--red:#e48d79;--green:#8cbdb4;--purple:#b4a5ce;--paper:#e8ddc5;--serif:"Noto Serif SC","Songti SC",SimSun,serif;font:15px/1.6 system-ui,"Microsoft YaHei",sans-serif}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 0,#26433955,transparent 60%),var(--bg);color:var(--ink);min-width:320px}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.1;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.35' filter='url(%23n)'/%3E%3C/svg%3E");z-index:-1}button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}button:disabled{cursor:not-allowed;opacity:.45}button:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:4px}button,input{ -webkit-tap-highlight-color:transparent}button{transition:background .18s,transform .18s,border-color .18s}button:not(:disabled):active{transform:translateY(2px)}h1,h2,h3,p{margin:0}h1,h2,h3{font-family:var(--serif);font-weight:600}h1{font-size:clamp(42px,5.5vw,76px);line-height:1.2;letter-spacing:.08em}h2{font-size:29px;letter-spacing:.04em}h3{font-size:19px}small{font-size:12px}.icon{width:22px;height:22px;vertical-align:middle;flex:none}.app-shell{max-width:1280px;margin:auto;padding:0 42px 32px}.topbar{min-height:90px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:11px;border:0;background:none;padding:8px 0;text-align:left}.brand-mark{width:39px;height:43px;border:1px solid #d8b36b88;display:grid;place-items:center;clip-path:polygon(50% 0,100% 20%,100% 80%,50% 100%,0 80%,0 20%);color:var(--gold)}.brand strong{font-family:var(--serif);font-size:22px;letter-spacing:.13em}.brand small{display:block;font-size:9px;letter-spacing:.3em;color:var(--muted)}.top-actions{display:flex;align-items:center;gap:8px}.icon-button{border:1px solid var(--line);background:#10272280;min-width:44px;height:44px;border-radius:50%;display:inline-grid;place-items:center}.icon-button:hover{background:var(--light);border-color:#d8b36b66}.text-button{background:none;border:0;padding:10px 12px;color:var(--muted);min-height:44px}.text-button:hover{color:var(--gold)}.btn{border:1px solid var(--line);background:#24423a;color:var(--ink);min-height:48px;padding:11px 24px;border-radius:8px;display:inline-flex;justify-content:center;align-items:center;gap:9px;font-weight:600}.btn:hover:not(:disabled){background:#315549}.btn.primary{background:var(--gold);border-color:#e8cd97;color:#203832;box-shadow:0 3px 0 #8b7043}.btn.primary:hover:not(:disabled){background:#e7c78a}.btn.ghost{background:transparent}.btn.wide{width:100%}.eyebrow{font-size:11px;letter-spacing:.24em;color:var(--gold);font-weight:700;text-transform:uppercase}.muted{color:var(--muted)}.gold{color:var(--gold)}.red{color:var(--red)}.green{color:var(--green)}.purple{color:var(--purple)}.separator{height:1px;background:var(--line);margin:20px 0}.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:#0b19194d;border:1px solid var(--line);border-radius:5px;font-size:12px;white-space:nowrap}.chip .icon{width:15px;height:15px}.section-heading{margin:30px 0 22px;display:flex;justify-content:space-between;align-items:end;gap:12px}.section-heading p{color:var(--muted);margin-top:5px}.panel{background:linear-gradient(130deg,#1d3930a6,#122b28b3);border:1px solid var(--line);border-radius:18px;padding:26px}.home{display:grid;grid-template-columns:1fr 1fr;min-height:650px;align-items:center;gap:20px}.home-copy{padding:40px 0 60px;position:relative;z-index:1}.home-copy h1{margin:16px 0 12px}.home-sub{font-family:var(--serif);font-size:24px;color:#d3d9bf;letter-spacing:.16em}.home-description{color:var(--muted);max-width:420px;margin:25px 0 32px;line-height:2}.home-buttons{display:flex;gap:12px;flex-wrap:wrap}.home-buttons .btn{min-width:180px}.home-meta{display:flex;gap:26px;margin-top:28px;font-size:12px;color:var(--muted)}.home-meta span{display:flex;gap:7px;align-items:center}.home-meta .icon{width:16px}.home-visual{position:relative}.tower-art{width:100%;filter:drop-shadow(0 18px 24px #020f0c77)}.home-visual:after{content:"I · XII";display:block;text-align:center;letter-spacing:.6em;color:#c8b68399;font:14px var(--serif);margin-top:-26px}.home-footer{border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;color:#80978a;font-size:12px}.features{display:flex;gap:32px}.features span{display:flex;align-items:center;gap:8px}.features .icon{width:18px;color:var(--gold)}.run-hud{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:19px 0;border-bottom:1px solid var(--line)}.floor-label{font:21px var(--serif);display:flex;align-items:baseline;gap:8px}.floor-label small{color:var(--muted);font:12px system-ui}.hud-values{display:flex;gap:22px;align-items:center}.hud-value{display:flex;align-items:center;gap:7px;font-weight:600}.hud-value .icon{width:19px}.hud-value.health{color:var(--red)}.hud-value.coins{color:var(--gold)}.hud-value.deck{border:0;background:none;min-height:44px;padding:0}.relic-strip{display:flex;flex-wrap:wrap;gap:7px;padding:12px 0;min-height:42px}.relic{border:1px solid #d8b36b30;background:#25362a;min-width:44px;min-height:44px;border-radius:7px;color:var(--gold);display:inline-flex;align-items:center;justify-content:center;padding:5px}.relic .icon{width:18px;height:18px}.route-layout{display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:center;margin:32px 0 20px}.route-art{position:relative}.route-art .tower-art{opacity:.8}.route-steps{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:18px 0 27px}.route-step{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;font-size:12px;color:#6f8a7b;position:relative}.route-step.current{background:var(--gold);color:#17372c;border-color:var(--gold);box-shadow:0 0 0 4px #d8b36b18}.route-step.past{color:#95b8a5;border-color:#557563}.route-step.boss{border-radius:8px;transform:rotate(45deg)}.route-step.boss span{transform:rotate(-45deg)}.route-step .icon{width:17px}.room-choices{display:grid;gap:12px}.room-choice{padding:20px 24px;display:flex;gap:18px;align-items:center;border:1px solid var(--line);border-radius:13px;background:linear-gradient(100deg,#203c32bb,#142d28);text-align:left;width:100%}.room-choice:hover{border-color:#d8b36b99;background:#254439}.room-symbol{height:54px;width:54px;display:grid;place-items:center;border:1px solid currentColor;border-radius:12px;flex:none;background:#081d1966}.room-symbol .icon{width:28px;height:28px}.room-choice h3{font-size:19px}.room-choice p{font-size:13px;color:var(--muted);margin-top:5px}.room-choice .icon:last-child{margin-left:auto;opacity:.7}.room-tag{font-size:11px;letter-spacing:.1em;margin-left:10px;color:var(--gold)}.route-tip{font-size:13px;color:var(--muted);margin-top:20px;display:flex;gap:8px}.battle-layout{display:grid;grid-template-columns:minmax(0,1fr) 240px;gap:28px;margin-top:20px}.battle-main{min-width:0}.battle-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px}.battle-heading h2{font-size:22px}.battle-heading .chip{color:var(--gold)}.arena{position:relative;min-height:245px;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;align-items:end;justify-content:space-around;background:radial-gradient(ellipse at 55% 10%,#6d8c612b,transparent 65%),linear-gradient(#1e3932,#102d28 85%)}.arena:before{content:"";position:absolute;left:33%;top:10px;width:37%;height:230px;border:14px solid #55705c30;border-radius:100% 100% 0 0;box-shadow:0 0 0 2px #a1ac7222,0 0 0 40px #3353461a;background:linear-gradient(#092625,#47685230)}.arena:after{content:"";position:absolute;bottom:-60px;left:-5%;width:110%;height:100px;background:#112f29;border-radius:50%;border-top:1px solid #b6bc7a30}.combatant{position:relative;z-index:1;text-align:center;min-width:120px;padding:15px 0 20px}.creature{width:190px;height:174px;display:block;max-width:100%;margin:auto;filter:drop-shadow(0 6px 7px #001c1677)}.player-art .creature{width:140px;height:130px}.combatant-label{font-size:13px;font-weight:600}.enemy-name{font-family:var(--serif);font-size:20px;margin-top:3px}.intent{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;background:#142b25e6;border:1px solid #db938b55;border-radius:7px;color:#f0ad98;font-size:13px;font-weight:600;position:relative;z-index:2}.intent .icon{width:17px}.enemy-art{padding-top:15px}.enemy-art .creature{margin-top:-10px}.health-track{height:7px;border-radius:10px;background:#081e1a;overflow:hidden;border:1px solid #203b31;margin:7px auto 3px;width:min(190px,90%)}.health-fill{height:100%;background:linear-gradient(90deg,#97674f,#e19d7f);border-radius:10px;transition:width .2s}.health-fill.player{background:linear-gradient(90deg,#779c76,#b5c999)}.health-number{font-size:11px;color:#d1d3b9}.status-list{display:flex;gap:5px;justify-content:center;flex-wrap:wrap;margin-top:6px}.status-list .chip{background:#102820;font-size:11px;padding:1px 6px}.hand-label{display:flex;justify-content:space-between;gap:10px;margin:19px 0 12px;color:var(--muted);font-size:12px}.hand-label b{font-size:14px;color:var(--ink)}.card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px}.game-card{position:relative;display:flex;flex-direction:column;align-items:stretch;min-width:0;min-height:222px;text-align:left;border:1px solid #cbb78d;border-radius:12px;padding:13px;background:linear-gradient(135deg,#f1e7d0,#ded1b3);color:#293d33;box-shadow:0 5px 0 #061c18,0 10px 16px #05181255;overflow:hidden}.game-card:before{content:"";position:absolute;inset:5px;border:1px solid #655b3430;border-radius:8px;pointer-events:none}.game-card:hover:not(:disabled){transform:translateY(-4px);box-shadow:0 5px 0 #061c18,0 0 0 2px #d8b36b77}.game-card.available{border-color:#e8c875;box-shadow:0 5px 0 #061c18,0 0 0 2px #d8b36b55}.game-card.unavailable{filter:saturate(.45);opacity:.67}.game-card-header{display:flex;justify-content:space-between;align-items:center;gap:4px}.game-card h3{font-size:17px;line-height:1.3}.card-kind{font-size:10px;color:#6a7056;white-space:nowrap}.card-emblem{margin:13px auto 10px;width:61px;height:61px;display:grid;place-items:center;background:#7b88601a;border:1px solid #7b88604d;border-radius:50%;color:#7e6944;position:relative}.card-emblem:after{content:"";position:absolute;inset:5px;border:1px solid #7b886033;border-radius:50%}.card-emblem .icon{width:32px;height:32px}.game-card.kind-guard .card-emblem{color:#4f7a6d}.game-card.kind-trick .card-emblem{color:#758255}.game-card.kind-fate .card-emblem{color:#806d91}.card-rule{font-size:11px;font-weight:700;padding:3px 0 7px;color:#6b694c}.card-description{font-size:13px;line-height:1.55;flex:1}.card-upgrade{font-size:11px;margin-top:6px;color:#748151}.card-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:11px;border-top:1px solid #4f65432b;padding-top:7px;font-size:10px;color:#7b8063}.card-bottom .icon{width:13px;height:13px}.empty-hand{grid-column:1/-1;text-align:center;padding:55px 20px;color:var(--muted);border:1px dashed var(--line);border-radius:12px}.dice-tray{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:23px;padding:18px;border:1px solid #b4bc8b33;border-radius:13px;background:#142e27}.dice-area{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.die{width:54px;height:54px;background:linear-gradient(145deg,#efe2be,#bfa16c);border:2px solid #d7bc81;border-radius:11px;color:#273d31;box-shadow:0 4px 0 #806a45;padding:10px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;flex:none;position:relative}.die.selected{outline:2px solid #e1ca90;outline-offset:5px;transform:translateY(-5px);background:#f1e6c9}.die.spent{opacity:.26;box-shadow:none;filter:saturate(.3)}.pip{width:7px;height:7px;align-self:center;justify-self:center;border-radius:50%;background:#294336}.die.placeholder{display:grid;place-items:center;background:#1d3c32;border:1px dashed #8ba27a66;box-shadow:none;color:#78947c}.die.placeholder .icon{width:26px;height:26px}.tray-actions{display:flex;gap:9px;flex-wrap:wrap;justify-content:end}.tray-actions .btn{min-height:44px;padding:9px 15px;font-size:13px}.tray-note{color:var(--muted);font-size:12px;margin-top:12px;text-align:center}.side-panel{padding:20px;height:fit-content}.side-panel h3{font-size:16px}.log-lines{list-style:none;padding:0;margin:14px 0 0;font-size:12px;line-height:1.8;color:#a9b9a8}.log-lines li{position:relative;padding:8px 0 8px 12px;border-bottom:1px solid #78916e15}.log-lines li:before{content:"";position:absolute;left:0;top:18px;width:3px;height:3px;background:#8d9c73;border-radius:50%}.log-lines li:last-child{color:#e3d6af}.side-tip{font-size:12px;color:var(--muted);margin:16px 0;line-height:1.9}.side-relics{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.center-stage{max-width:900px;margin:32px auto 0;text-align:center}.center-stage>.eyebrow{margin-bottom:8px}.center-stage>p{margin-top:9px;color:var(--muted)}.center-stage .card-grid{max-width:720px;margin:28px auto;grid-template-columns:repeat(3,minmax(0,1fr));text-align:left}.reward-summary{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:20px 0}.reward-summary .chip{font-size:14px;padding:8px 16px}.large-emblem{width:100px;height:100px;border:1px solid #bbac6e44;border-radius:50%;display:grid;place-items:center;color:var(--gold);margin:5px auto 22px;background:radial-gradient(#718c4530,transparent)}.large-emblem .icon{width:48px;height:48px}.choice-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:28px auto;max-width:760px;text-align:left}.choice-panel{display:flex;flex-direction:column;align-items:start;gap:13px;min-height:240px}.choice-panel .icon{color:var(--gold);width:36px;height:36px}.choice-panel p{font-size:14px;color:var(--muted);flex:1}.choice-panel .btn{width:100%}.shop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:26px auto;max-width:730px}.shop-item{text-align:center}.shop-item>.game-card{width:100%;min-height:230px}.shop-item>.btn{margin-top:14px;width:100%;padding:9px 12px}.shop-extras{display:flex;gap:18px;margin:20px auto 28px;max-width:730px;text-align:left}.shop-extras>.panel{flex:1}.shop-extras .btn{margin-top:14px;width:100%}.shop-extras p{font-size:13px;color:var(--muted);margin-top:8px}.event-story{max-width:620px;margin:15px auto 26px!important;font-family:var(--serif);line-height:2.1}.event-options{display:grid;gap:12px;max-width:600px;margin:25px auto;text-align:left}.event-options .btn{justify-content:space-between;text-align:left;padding:17px 22px}.event-options small{display:block;font-weight:400;color:var(--muted)}.result-stats{display:flex;justify-content:center;gap:30px;padding:24px 0;margin:20px auto 25px;border-block:1px solid var(--line);max-width:640px}.result-stats strong{display:block;font:30px var(--serif);color:var(--gold)}.result-stats small{color:var(--muted)}.result-actions{display:flex;justify-content:center;gap:12px}.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,15px);max-width:min(90vw,520px);padding:12px 22px;background:#e8ddc5;color:#213a30;border:1px solid #d8b36b;border-radius:10px;box-shadow:0 8px 30px #0006;opacity:0;visibility:hidden;transition:.2s;z-index:20;pointer-events:none}.toast.visible{opacity:1;visibility:visible;transform:translate(-50%,0)}dialog{background:#17312a;color:var(--ink);border:1px solid #b6b18066;border-radius:18px;padding:0;width:min(760px,calc(100vw - 30px));max-height:85dvh;box-shadow:0 25px 100px #0009}dialog::backdrop{background:#030f0cbb;backdrop-filter:blur(5px)}.modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#17312a;z-index:3}.modal-header h2{font-size:23px}.modal-body{padding:24px;overflow-y:auto;max-height:calc(85dvh - 90px)}.modal-body .card-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.modal-body .game-card{min-height:220px}.modal-body p{color:var(--muted);margin-bottom:12px}.help-steps{counter-reset:step;list-style:none;padding:0;margin:0}.help-steps li{position:relative;padding:0 0 20px 43px;color:var(--muted)}.help-steps li:before{counter-increment:step;content:counter(step);position:absolute;left:0;top:0;width:27px;height:27px;background:#344e3b;color:var(--gold);border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;font-size:12px}.help-steps strong{display:block;color:var(--ink);margin-bottom:4px}.relic-list{display:grid;gap:12px}.relic-list>div{display:flex;gap:15px;align-items:center;padding:12px;border-bottom:1px solid var(--line)}.relic-list .icon{width:28px;color:var(--gold)}.relic-list p{font-size:13px;margin:3px 0}.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.anim-roll .die:not(.spent){animation:roll .32s ease-out}.anim-hit .enemy-art .creature{animation:hit .28s ease-out}.anim-buff .player-art .creature{animation:buff .24s ease-out}.anim-hurt .player-art .creature{animation:hit .28s ease-out}.screen-enter{animation:appear .3s ease-out}.damage-float{position:absolute;top:40%;left:50%;font:700 30px var(--serif);color:#f2b199;z-index:5;animation:float .65s ease-out forwards;pointer-events:none;text-shadow:0 2px 7px #000}.footnote{font-size:12px;color:var(--muted);margin-top:24px}.continue-note{font-size:12px;color:#b7c19d;margin-top:15px}.turn-guide{color:#d5c79d;font-size:12px}.text-link{color:var(--gold)}
+@keyframes roll{0%{transform:rotate(-12deg) scale(.8)}50%{transform:rotate(8deg) scale(1.1)}100%{transform:rotate(0) scale(1)}}@keyframes hit{25%{transform:translateX(7px);filter:brightness(1.6)}70%{transform:translateX(-3px)}}@keyframes buff{50%{filter:brightness(1.5);transform:translateY(-3px)}}@keyframes appear{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes float{to{transform:translateY(-45px);opacity:0}}
+@media(min-width:1500px){.app-shell{max-width:1380px}.arena{min-height:285px}.creature{width:220px;height:200px}.game-card{min-height:245px}}
+@media(max-width:1050px){.app-shell{padding-inline:26px}.battle-layout{grid-template-columns:minmax(0,1fr)}.side-panel{display:none}.route-layout{grid-template-columns:230px 1fr;gap:25px}.home{min-height:580px}.home-meta{gap:15px}.home-buttons .btn{min-width:155px}.card-grid{gap:10px}}
+@media(max-width:650px){:root{font-size:14px}.app-shell{padding:0 16px calc(22px + env(safe-area-inset-bottom))}.topbar{min-height:76px;padding-top:env(safe-area-inset-top)}.brand strong{font-size:20px}.brand small{font-size:8px}.brand-mark{width:32px;height:37px}.top-actions{gap:5px}.icon-button{width:44px;height:44px;min-width:44px;border-color:transparent}.top-actions .optional-label{display:none}.home{display:flex;flex-direction:column-reverse;gap:0;min-height:0}.home-visual{max-width:350px;width:100%;margin:-20px auto -60px}.home-copy{padding:0 8px 36px;text-align:center}.home-copy h1{font-size:46px;margin-top:10px}.home-sub{font-size:20px}.home-description{font-size:14px;line-height:1.85;margin:17px auto 24px}.home-buttons{justify-content:center;gap:10px}.home-buttons .btn{min-width:145px}.home-meta{justify-content:center;font-size:11px;margin-top:23px;gap:16px}.home-meta span{gap:4px}.home-footer{font-size:11px;gap:10px;flex-direction:column;align-items:center}.features{gap:18px}.run-hud{padding:9px 0;gap:8px}.floor-label{font-size:17px;gap:5px}.floor-label small{font-size:10px}.hud-values{gap:12px}.hud-value{gap:4px;font-size:12px}.hud-value .icon{width:16px}.relic-strip{padding:8px 0;gap:6px;min-height:34px}.relic{min-width:44px;min-height:44px;padding:3px}.relic .icon{width:16px}.route-layout{display:block;margin-top:15px}.route-art{display:none}.section-heading{margin:18px 0}.section-heading h2{font-size:24px}.section-heading p{font-size:13px}.route-steps{gap:5px;margin:16px 0 23px}.route-step{width:23px;height:23px;font-size:10px}.route-step .icon{width:13px}.room-choice{padding:16px;gap:13px}.room-symbol{width:45px;height:45px}.room-choice h3{font-size:17px}.room-choice p{font-size:12px;line-height:1.6}.room-tag{font-size:10px}.room-choice>.icon{width:17px}.battle-layout{margin-top:12px;gap:0}.battle-heading{margin-bottom:10px}.battle-heading h2{font-size:18px}.battle-heading .chip{font-size:11px}.arena{min-height:220px;border-radius:13px}.combatant{min-width:110px;padding-bottom:13px}.creature{width:160px;height:146px}.player-art .creature{width:112px;height:103px}.enemy-name{font-size:17px}.intent{font-size:11px;padding:4px 8px}.combatant-label{font-size:12px}.health-number{font-size:10px}.status-list .chip{font-size:10px}.status-list .icon{width:12px}.health-track{max-width:130px}.hand-label{margin:13px 0 10px;font-size:10px}.hand-label b{font-size:13px}.turn-guide{font-size:11px}.card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.game-card{min-height:192px;padding:11px}.game-card h3{font-size:17px}.card-emblem{width:45px;height:45px;margin:8px auto}.card-emblem .icon{width:25px;height:25px}.card-rule{font-size:10px;padding-bottom:5px}.card-description{font-size:13px;line-height:1.6}.card-bottom{margin-top:8px;padding-top:5px}.card-kind{font-size:10px}.card-upgrade{font-size:10px}.dice-tray{gap:10px;padding:13px 10px;flex-wrap:wrap;margin-top:16px}.dice-area{gap:10px;justify-content:center;margin:auto}.die{width:48px;height:48px;padding:9px;gap:2px}.die.selected{outline-offset:3px}.pip{width:6px;height:6px}.tray-actions{width:100%;justify-content:center;margin-top:6px}.tray-actions .btn{flex:1;white-space:nowrap;padding:9px 10px;font-size:12px}.tray-note{font-size:11px;margin-top:9px}.center-stage{margin-top:24px}.center-stage h2{font-size:26px}.center-stage>p{font-size:13px}.center-stage .card-grid{grid-template-columns:1fr;max-width:440px;gap:12px;margin-block:22px}.center-stage .card-grid .game-card{min-height:140px;padding:15px 15px 15px 86px}.center-stage .card-grid .card-emblem{position:absolute;left:16px;top:34px}.center-stage .card-grid .card-description{font-size:13px}.center-stage .card-grid .card-bottom{margin-top:7px}.reward-summary{gap:9px;margin-block:16px}.reward-summary .chip{font-size:12px;padding:6px 10px}.large-emblem{width:80px;height:80px;margin-bottom:18px}.large-emblem .icon{width:38px}.choice-cards{grid-template-columns:1fr;gap:12px}.choice-panel{min-height:180px;padding:20px}.choice-panel>.icon{width:28px;height:28px}.choice-panel p{font-size:13px}.choice-panel h3{font-size:19px}.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.shop-grid .shop-item:last-child{grid-column:1/-1;max-width:210px;width:100%;justify-self:center}.shop-item>.game-card{min-height:215px}.shop-extras{flex-direction:column;gap:12px}.panel{padding:21px}.result-stats{gap:22px;padding:20px 0}.result-stats strong{font-size:25px}.result-stats small{font-size:11px}.event-options .btn{padding:14px 16px;font-size:14px}.event-options small{font-size:12px}.event-story{font-size:15px}.modal-header{padding:15px 17px}.modal-header h2{font-size:21px}.modal-body{padding:18px}.modal-body .card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.modal-body .game-card{min-height:210px}.toast{bottom:calc(18px + env(safe-area-inset-bottom));font-size:13px;padding:11px 16px}.result-actions{flex-direction:column;max-width:280px;margin:auto}.footnote{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.game-card:hover{transform:none!important}}
+
+button.chip{min-width:44px;min-height:44px}
+
+.hud-value.deck{min-width:44px;justify-content:center}
+.modal-body .game-card .card-description{color:#293d33}.modal-body .game-card .card-upgrade{color:#4e623b;font-size:13px}
+/* v2: grid exploration and mana card combat; retain the approved jade/brass system. */
+.topbar nav{display:flex;align-items:center;gap:8px}.topbar .text-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px}.home-actions{display:flex;gap:12px;flex-wrap:wrap}.home-actions .btn{min-width:175px}.saved-note{font-size:13px;color:#bbc6a9;margin-top:14px}.tower-caption{display:block;text-align:center;font-size:10px;letter-spacing:.35em;color:#c8b68399;margin-top:-24px}.home-visual:after{display:none}.camp-link{display:flex;align-items:center;gap:9px;border:0;background:none;min-height:48px;padding:6px 0;margin-top:24px;color:var(--muted)}.camp-link>span{display:inline-flex;align-items:center;gap:5px;color:var(--gold);margin-left:15px}.camp-link>.icon:last-child{width:16px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:24px;margin:35px 0 28px}.section-title h1{font-size:38px;margin:6px 0}.section-title p:not(.eyebrow){color:var(--muted)}.bank-balance{padding:18px 25px;border:1px solid #d8b36b44;border-radius:13px;color:var(--gold);font-size:31px;white-space:nowrap}.bank-balance small{display:block;color:var(--muted);font-size:12px}.camp-note{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:14px;margin-bottom:28px}.camp-offer>.btn{width:100%;margin-top:14px}.center-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.camp-screen>.center-actions{margin-top:28px}.floor-name{font:22px var(--serif);display:flex;align-items:baseline;gap:8px;white-space:nowrap}.floor-name small{font:12px system-ui;color:var(--muted)}.hud-values>span,.hud-button{display:inline-flex;align-items:center;gap:6px;font-weight:600}.hud-values small{font-weight:400}.health{color:var(--red)}.yellow{color:var(--gold)}.blue{color:#94b9d8}.hud-button{border:0;background:none;min-width:44px;min-height:44px;justify-content:center;padding:5px}.under-hud{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:7px 0;min-height:53px}.small{font-size:13px}.potions{display:flex;gap:5px}.potions>button{border:0;background:#132c26;border-radius:8px;min-width:49px;min-height:44px;padding:5px 7px;color:var(--green)}.potions>button:last-child{color:#94b9d8}.potions .icon{width:18px;height:18px}.route{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 23px}.route>span{width:26px;height:26px;border:1px solid var(--line);border-radius:50%;display:grid;place-items:center;color:#849d8d;font-size:11px}.route>span.current{background:var(--gold);border-color:var(--gold);color:#1a382b}.route>span.past{color:#b0c2a8;border-color:#728a69}.route .icon{width:14px;height:14px}
+.explore-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:26px;margin-top:16px}.map-main{min-width:0}.map-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:15px}.map-heading h2{font-size:23px;margin-top:4px}.map-frame{position:relative;max-width:545px;margin:auto;border:1px solid #8b9b6d44;border-radius:15px;overflow:hidden;background:#102820;box-shadow:0 10px 35px #03140e66}.map-scroll{overflow-x:auto;padding:8px;scrollbar-color:#536d59 #0d251e;scrollbar-width:thin}.map-grid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));min-width:414px;gap:3px;aspect-ratio:1}.map-tile{position:relative;display:grid;place-items:center;aspect-ratio:1;border:1px solid #45614c44;background:linear-gradient(140deg,#2b4536,#233d30);border-radius:4px;min-width:0;padding:0;isolation:isolate;overflow:hidden;color:#d4c08b}.map-tile:before{content:"";position:absolute;inset:4px;border-bottom:1px solid #75856724;transform:rotate(-15deg);pointer-events:none}.map-tile:disabled{opacity:1;cursor:default}.map-tile.wall{background:linear-gradient(145deg,#3a4938,#1a2e23);border:1px solid #42513b66;box-shadow:inset 0 6px 0 #5a68502b,inset -3px -4px 0 #071d1555}.map-tile.wall:before{border:1px solid #0b251633;transform:none;inset:6px 4px 3px}.map-tile.reachable{background:linear-gradient(140deg,#31534d,#25463f);border-color:#72aaa580}.map-tile.reachable:hover{border-color:#d8c17e;background:#3b6254}.map-tile.path{background:#6a7952;border-color:#d2b36a;box-shadow:inset 0 0 0 1px #e0c88955}.map-tile.destination{box-shadow:inset 0 0 0 3px var(--gold)}.map-tile>.icon{width:26px;height:26px;position:relative;z-index:1}.map-tile .creature{width:100%;height:100%;position:absolute;inset:0;filter:drop-shadow(0 2px 2px #0008);transform:scale(1.13);pointer-events:none}.map-tile.hero{background:#6b7450;border-color:#e1c27f;box-shadow:inset 0 0 0 2px #ddbc7355}.map-tile.monster{background:#4b3c34;border-color:#a9735955}.map-tile.monster.boss{background:#514731;border-color:#d8b36b99}.enemy-count{position:absolute;bottom:1px;right:2px;font-size:10px;font-weight:700;background:#191e15dc;color:#f4d7a2;border-radius:3px;min-width:14px;line-height:1.4;z-index:2}.map-tile.loot{background:radial-gradient(#a2994b25,#2b4433);color:#d8bc72}.map-tile.blue{color:#98bad6}.map-tile.door{background:repeating-linear-gradient(90deg,#3b3d26 0 9px,#76673d 10px,#3b3d26 11px 16px);border-color:#c6a55b88}.map-tile.door.blue{background:repeating-linear-gradient(90deg,#273f45 0 9px,#4b6e7a 10px,#273f45 11px 16px)}.map-tile.rest{color:#ebae72}.map-tile.merchant{color:#e0c477}.map-tile.stairs{color:#c2d1ad;background:#263f30;box-shadow:inset 0 0 12px #9aac6544}.tile-dot{width:3px;height:3px;background:#a2b18a26;border-radius:50%}.dice-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:17px;background:radial-gradient(ellipse at center,#102a25f2 0,#102a25e8 30%,#102a2590 65%,#102a2522);z-index:5;text-align:center;padding:18px}.dice-overlay>p:last-child{color:#c0c6ad;font-size:13px}.central-dice{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;min-width:120px;padding:12px}.central-dice strong{font-family:var(--serif);font-size:20px;color:#edd7a1;letter-spacing:.06em}.central-dice:hover:not(:disabled) .die{box-shadow:inset 0 2px 3px #fff8,0 6px 0 #846a38,0 0 35px #dcbb6c66;transform:translateY(-3px)}.central-dice:disabled{opacity:1}.dice-group{display:flex;justify-content:center;gap:17px;perspective:600px}.die{display:inline-grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:3px;background:linear-gradient(145deg,#f2e7c8,#c3a76d);border:2px solid #dbc18a;box-shadow:inset 0 2px 3px #fff8,0 5px 0 #846a38,0 10px 20px #0005}.die.large{width:82px;height:82px;padding:13px;gap:5px;border-radius:17px}.die i{display:block;align-self:center;justify-self:center;width:100%;height:100%;border-radius:50%;background:#284336;box-shadow:inset 0 1px 2px #071b1488}.rolling .die{animation:dice-roll .9s cubic-bezier(.15,.8,.32,1) both}.rolling .die:nth-child(2){animation-delay:.04s}.rolling .die:nth-child(3){animation-delay:.08s}.map-status{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:9px;padding:12px 0}.map-status>span{font-size:12px;color:var(--muted)}.dice-summary{border:1px solid #d8b36b44;background:#273a29;color:#e7cf95;border-radius:7px;min-height:44px;min-width:44px;padding:8px 11px}.dice-summary .icon{width:18px;height:18px}.map-status>span .icon{width:15px;height:15px}.move-panel{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 18px;border:1px solid var(--line);background:#142e27;border-radius:12px}.move-panel strong{display:block;font-size:14px}.move-panel small{display:block;color:var(--muted);font-size:12px;margin-top:4px}.move-panel .btn{white-space:nowrap;padding:10px 17px}.map-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.map-actions .btn{font-size:13px;min-height:44px;padding:8px 14px}.map-footnote{color:var(--muted);font-size:12px;margin-top:16px}.map-footnote .icon{width:17px;height:17px}.prep-panel{padding:20px}.prep-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.prep-title h3{font-size:22px}.prep-title p{font-size:12px;color:var(--muted);margin-top:5px}.prep-charge{font:30px var(--serif);color:var(--gold);text-align:center;white-space:nowrap}.prep-charge small{display:block;font:10px system-ui;color:var(--muted)}.amount-control{display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--muted);margin:18px 0 12px;padding-top:12px;border-top:1px solid var(--line)}select{background:#19392e;color:var(--ink);border:1px solid var(--line);border-radius:7px;padding:8px 12px;min-height:44px;font:inherit}.explore-cards{display:grid;gap:8px}.explore-card{display:flex;align-items:center;gap:10px;padding:11px 12px;text-align:left;border:1px solid var(--line);border-radius:9px;background:#152e27;min-height:70px}.explore-card b{display:block;font:16px var(--serif);color:#d9d9bd}.explore-card small{display:block;font-size:12px;line-height:1.6;color:#9daf9d;margin-top:3px}.explore-card.available{border-color:#bdad6466;background:linear-gradient(120deg,#36472d66,#182f27)}.explore-card.available:hover{border-color:#d8b36b;background:#344630}.mini-symbol{width:32px;min-width:32px;color:var(--gold);align-self:start;padding-top:3px}.mini-symbol .icon{width:23px;height:23px}.next-contract{font-size:12px;color:var(--gold);border-top:1px solid var(--line);padding-top:14px;margin-top:16px}.next-contract .icon{width:16px;height:16px}.journey-panel{padding:20px;margin-top:18px}.log-list{padding-left:19px;color:var(--muted);font-size:13px;line-height:1.85;margin:13px 0 0}.log-list li{padding-bottom:7px}.mobile-only{display:none}
+.center-stage>h1{font-size:37px;margin:9px 0 14px;line-height:1.4}.encounter-enemies{display:flex;justify-content:center;gap:25px;flex-wrap:wrap;margin:35px 0 22px}.encounter-enemies>article{width:150px}.encounter-enemies .creature{width:150px;height:150px}.encounter-enemies h3{font-size:17px}.encounter-summary{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:28px}.reward-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:760px;margin:28px auto}.reward-cards .game-card{min-height:270px}.rest-choices{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;text-align:left;max-width:760px;margin:30px auto}.rest-choices>.panel{display:flex;flex-direction:column;gap:15px;align-items:start}.rest-choices>.panel>.icon{width:35px;height:35px;color:var(--gold)}.rest-choices p{color:var(--muted);font-size:14px;flex:1}.rest-choices .btn{width:100%}.result-stats small{display:block;margin-top:7px}
+.wide-shell{max-width:1420px}.battle-heading{display:flex;align-items:center;justify-content:space-between;gap:15px;margin:14px 0}.battle-heading h2{font-size:24px;margin-top:3px}.battle-round{display:flex;align-items:center;gap:15px;font-size:13px;color:var(--muted)}.battle-arena{position:relative;display:grid;grid-template-columns:180px 40px minmax(0,1fr);align-items:center;gap:16px;min-height:312px;border:1px solid var(--line);border-radius:18px;background:radial-gradient(ellipse at 52% 0,#7b906029,transparent 70%),linear-gradient(#203b33,#102c27);padding:22px 25px 26px;overflow:hidden;isolation:isolate}.battle-arena:before{content:"";position:absolute;top:-28px;left:34%;width:33%;height:300px;border:15px solid #526c4e28;border-radius:100% 100% 0 0;box-shadow:0 0 0 35px #4d67491a,0 0 0 65px #4d67490d;z-index:-1}.battle-arena:after{content:"";position:absolute;bottom:-65px;left:-10%;width:120%;height:100px;border-radius:50%;border-top:1px solid #b6bc7a26;background:#133027;z-index:-1}.hero-combatant{text-align:center;position:relative}.hero-portrait .creature{width:160px;height:165px}.hero-combatant h3{font-size:19px}.combat-stats{font-size:13px;color:#cecdb0;margin:5px 0}.combat-stats .icon{width:15px;height:15px;color:var(--gold)}.combat-stats>span{margin-left:9px}.health-track>span{display:block;height:100%;background:linear-gradient(90deg,#986952,#e19d7f);transition:width .25s}.hero-combatant .health-track>span{background:linear-gradient(90deg,#829d71,#b9cc98)}.health-number{display:block;font-size:12px}.arena-divider{font-family:var(--serif);font-size:16px;letter-spacing:.1em;color:#b3b68c66;text-align:center}.enemy-lineup{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;align-items:end;min-width:0}.enemy-lineup:has(>.enemy-combatant:nth-child(2):last-child){grid-template-columns:repeat(2,minmax(0,1fr))}.enemy-lineup:has(>.enemy-combatant:only-child){grid-template-columns:minmax(0,240px);justify-content:center}.enemy-lineup.many-enemies{grid-template-columns:repeat(4,minmax(0,1fr))}.enemy-combatant{position:relative;min-width:0;border:1px solid transparent;border-radius:12px;background:transparent;padding:8px 9px 11px;text-align:center;min-height:260px}.enemy-combatant.targeted{border-color:#d8b36b88;background:#b1a6580a;box-shadow:0 0 0 3px #d8b36b0c}.enemy-combatant.valid-target{cursor:crosshair}.enemy-combatant.valid-target:hover{background:#c1b26a1a;box-shadow:0 0 0 2px var(--gold)}.enemy-combatant.defeated{opacity:.25;filter:grayscale(1)}.enemy-combatant .creature{width:166px;height:137px;margin-top:-5px}.enemy-combatant h3{font-size:17px;margin-top:2px}.intent{position:static;font-size:12px;min-height:30px;line-height:1.5;padding:5px 8px;justify-content:center}.spell-intent{color:#cbb9e3;border-color:#b099d055}.enemy-defense{font-size:11px;color:#9db09c;margin:2px 0}.enemy-defense .icon{width:13px;height:13px}.status-chips{display:flex;justify-content:center;gap:5px;flex-wrap:wrap;margin-top:7px}.status-chip{display:inline-flex;gap:3px;align-items:center;font-size:11px;border:1px solid #8b9d6e33;background:#0d281d;border-radius:4px;padding:1px 5px;color:#d1cc9e}.status-chip .icon{width:13px;height:13px}.battle-toolbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:17px 0 9px}.mana-display{display:flex;align-items:center;gap:9px;flex:none}.mana-display>span{height:52px;width:45px;background:linear-gradient(#435e70,#274957);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);display:grid;place-items:center;color:#d8e9ed}.mana-display strong{font:38px var(--serif);color:#bed6e1}.mana-display small{font-size:11px;line-height:1.5;color:#a2b7bd}.mana-dots{display:flex;gap:5px;margin-left:5px}.mana-dots i{width:8px;height:8px;border:1px solid #5c8290;border-radius:50%}.mana-dots i.full{background:#a9d5df;box-shadow:0 0 7px #89c4d444}.target-guide{color:var(--muted);font-size:12px;flex:1}.target-guide strong{display:block;font-size:14px;font-weight:500;color:#d5d9bf}.target-guide>span{display:block}.target-guide>.text-button{min-height:44px;padding:0;color:var(--gold);font-size:12px}.turn-controls{display:flex;gap:10px}.turn-controls .btn{white-space:nowrap}.hand-heading{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:13px;gap:12px}.hand-heading strong{color:var(--ink);font-size:14px}.hand-heading small{font-size:12px;margin-left:6px;color:var(--muted);font-weight:400}.hand-heading .text-button{font-size:12px;padding:5px 8px}.hand{display:flex;gap:14px;align-items:stretch;overflow-x:auto;padding:10px 4px 22px;scrollbar-width:thin;scrollbar-color:#6a795c #0c251d;scroll-snap-type:x proximity}.hand>.game-card{flex:1 0 170px;max-width:245px;scroll-snap-align:start}.empty-hand{width:100%;border:1px dashed var(--line);border-radius:12px;text-align:center;padding:45px 20px;color:var(--muted)}.battle-log{margin-top:7px;border:1px solid var(--line);border-radius:10px;padding:12px 16px;background:#132a24}.battle-log summary{cursor:pointer;font-size:13px;color:#bdc6ac;min-height:24px}.battle-log summary>span{font-size:11px;color:var(--muted);margin-left:12px}.battle-log .log-list{columns:2;column-gap:40px;font-size:12px}.effect-hit .enemy-combatant.targeted .creature{animation:hit .3s ease-out}.effect-buff .hero-portrait{animation:buff .3s ease-out}.effect-hurt .hero-portrait{animation:hit .3s ease-out}
+.game-card{min-height:263px;padding:14px;isolation:isolate}.game-card:after{content:"";position:absolute;inset:0;opacity:.2;background:radial-gradient(ellipse at 90% 0,#d5bc7a,transparent 60%);pointer-events:none;z-index:-1}.game-card.selected{box-shadow:0 5px 0 #061b15,0 0 0 3px #ead088;transform:translateY(-4px)}.card-top{display:flex;gap:8px;align-items:center;min-height:30px}.card-cost{display:inline-flex;justify-content:center;align-items:center;background:linear-gradient(145deg,#528094,#37596b);border:1px solid #768f89;box-shadow:0 2px 0 #36535b;color:#f2eee0;border-radius:50%;width:29px;min-width:29px;height:29px;font-size:18px;font-family:var(--serif);line-height:1}.card-cost.explore-cost{background:#8a7e57;border-color:#a79d70}.card-cost .icon{width:17px;height:17px}.game-card h3{font-size:18px;line-height:1.3;flex:1}.game-card sup{color:#92722f;font-size:14px}.card-art{position:relative;margin:15px auto 12px;width:72px;height:72px;display:grid;place-items:center;color:#8e7048;border:1px solid #8d805244;border-radius:50%;background:radial-gradient(#b3a47626,transparent)}.card-art:after{content:"";position:absolute;inset:6px;border:1px solid #978a4d33;border-radius:50%}.card-art>.icon{width:37px;height:37px}.card-orbit{position:absolute;inset:-4px;border:1px solid #9d905022;border-radius:22%;transform:rotate(45deg)}.type-skill .card-art{color:#617b91}.type-defense .card-art{color:#4d7a69}.type-attack .card-art{color:#986752}.type-dice .card-art{color:#826e97}.card-type{display:flex;justify-content:space-between;font-size:11px;color:#686b4e;font-weight:600;margin-bottom:7px}.card-type>span{font-weight:400;color:#7d8066}.card-description{font-size:13px!important;line-height:1.7;color:#293d33}.card-bottom{font-size:10px}.upgrade-text{color:#4f683c;font-size:13px;border-top:1px solid #7c80502b;margin-top:8px;padding-top:6px}.catalog-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 18px}.catalog-grid .game-card{width:100%}.collection-label{font-size:12px;text-align:center;margin-top:10px!important;color:var(--muted)}.catalog-filters{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:15px}.catalog-filters label{color:var(--muted);font-size:13px}.catalog-filters select{margin-left:5px}.shop-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:23px;max-width:780px;margin:auto}.shop-cards>section>.btn{width:100%;margin-top:16px}.shop-services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:30px}.shop-services .panel{padding:22px;display:flex;flex-direction:column;align-items:stretch}.shop-services .panel p{color:var(--muted);font-size:13px;margin:9px 0 15px;flex:1}.shop-services .btn{font-size:13px;padding:10px 12px;margin-top:8px}.service-heading{display:flex;align-items:center;gap:9px;color:var(--gold)}.supply-list{display:grid;gap:6px;margin-top:10px}.supply-list>.btn{justify-content:start}.supply-list small{margin-left:auto;color:var(--gold);font-size:12px}.modal-body .catalog-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 13px}.modal-body .game-card p{color:#293d33}.modal-body .game-card .upgrade-text{color:#4f683c}.modal-body .game-card{min-height:260px}.modal-body .collection-label{color:var(--muted)!important}.modal-body .prep-title{padding-bottom:5px}.modal-body .explore-card{width:100%}.modal-body .prep-title p{margin-bottom:0}.modal-body{overflow-y:auto}.relic-list>section{display:flex;gap:15px;align-items:center;border-bottom:1px solid var(--line);padding:10px 0 15px}.relic-list>section>.icon{width:30px;height:30px;color:var(--gold)}
+@keyframes dice-roll{0%{transform:translateY(-20px) rotateX(0) rotateZ(-20deg) scale(.8)}25%{transform:translateY(7px) rotateX(170deg) rotateZ(85deg) scale(1.1)}55%{transform:translateY(-15px) rotateX(340deg) rotateZ(190deg)}75%{transform:translateY(6px) rotateX(350deg) rotateZ(340deg) scale(1.03)}100%{transform:translateY(0) rotateX(360deg) rotateZ(360deg) scale(1)}}
+@media(max-width:1100px){.explore-layout{grid-template-columns:minmax(0,1fr) 285px;gap:18px}.prep-panel{padding:17px}.prep-title p{font-size:11px}.battle-arena{grid-template-columns:130px 20px minmax(0,1fr);padding:20px 13px;gap:10px}.hero-portrait .creature{width:125px;height:140px}.enemy-lineup{gap:7px}.enemy-combatant{padding:7px 5px;min-height:245px}.enemy-combatant .creature{height:125px}.battle-toolbar{gap:13px}.mana-display{gap:6px}.mana-dots{display:none}.turn-controls .btn{padding:10px 15px}.catalog-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.shop-services{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-services>.panel:last-child{grid-column:1/-1}.supply-list{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.explore-layout{grid-template-columns:minmax(0,1fr)}.explore-sidebar{display:none}.mobile-only{display:inline-flex}.map-frame{max-width:550px}.map-heading{max-width:550px;margin-inline:auto}.map-status,.move-panel,.map-actions,.map-footnote{max-width:550px;margin-inline:auto}.map-actions{margin-top:12px}.map-footnote{margin-top:15px}.map-status{padding-block:12px}.battle-toolbar{flex-wrap:wrap}.target-guide{order:3;flex-basis:100%;text-align:center;min-height:34px}.turn-controls{margin-left:auto}.battle-arena{grid-template-columns:100px 0 minmax(0,1fr);gap:8px;padding:17px 12px}.arena-divider{display:none}.hero-portrait .creature{width:100px;height:145px}.hero-combatant h3{font-size:16px}.enemy-lineup.many-enemies{grid-template-columns:repeat(2,minmax(0,1fr))}.enemy-combatant h3{font-size:15px}.intent{font-size:11px;padding:4px 5px}.enemy-combatant .creature{height:120px}.catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.camp-note{align-items:start}}
+@media(max-width:550px){.app-shell{padding:0 15px calc(24px + env(safe-area-inset-bottom))}.topbar nav{gap:2px}.topbar .text-button{padding:8px 5px}.desktop-label{display:none}.home-visual{max-width:330px;margin:-18px auto -47px}.tower-caption{display:none}.home-copy>.eyebrow{font-size:9px;letter-spacing:.18em}.home-copy h1{font-size:47px}.home-actions{justify-content:center;gap:10px}.home-actions .btn{min-width:143px;padding:12px 15px;font-size:13px}.home-meta{gap:13px;font-size:11px}.camp-link{margin:19px auto 0;font-size:13px}.home-footer{font-size:11px}.section-title{align-items:start;gap:12px;margin:25px 0 20px;flex-wrap:wrap}.section-title h1{font-size:29px}.section-title .btn{min-height:44px;font-size:13px;padding:9px 13px}.bank-balance{font-size:25px;padding:12px 18px}.bank-balance small{font-size:10px}.camp-note{font-size:13px;padding:17px;gap:9px}.catalog-grid{gap:20px 12px}.camp-offer>.btn{padding:9px 7px;font-size:12px}.run-hud{flex-wrap:wrap;padding:9px 0 7px}.floor-name{font-size:17px;gap:5px}.floor-name small{font-size:10px}.hud-values{gap:8px;flex-wrap:wrap}.hud-values>span{font-size:12px;gap:3px}.hud-values>span>small{font-size:10px}.hud-button{font-size:12px;padding:5px 0}.hud-values .icon{width:15px;height:15px}.under-hud{min-height:47px;padding:3px 0;gap:6px}.under-hud .small{font-size:11px}.potions{gap:1px}.potions>button{min-width:44px;font-size:12px}.explore-layout{margin-top:10px}.map-heading{gap:8px;margin-bottom:12px}.map-heading .eyebrow{font-size:9px}.map-heading h2{font-size:19px}.map-heading .chip{font-size:11px;padding:4px 7px}.map-scroll{padding:6px}.map-grid{gap:2px;min-width:414px}.map-frame{border-radius:11px}.dice-overlay{gap:15px;padding:15px}.dice-overlay .eyebrow{font-size:9px}.central-dice{gap:22px}.central-dice strong{font-size:18px}.die.large{width:72px;height:72px;padding:12px;gap:4px;border-radius:15px}.dice-group{gap:13px}.dice-overlay>p:last-child{font-size:12px}.map-status{gap:6px}.map-status .dice-summary{font-size:12px}.map-status>span{font-size:10px}.map-status>span .icon{width:13px;height:13px}.move-panel{gap:10px;padding:13px 12px}.move-panel strong{font-size:12px}.move-panel small{font-size:10px;line-height:1.6}.move-panel .btn{padding:9px 12px;font-size:12px;min-height:44px}.map-actions{gap:7px}.map-actions .btn{font-size:12px;padding:9px 11px}.map-footnote{font-size:11px;line-height:1.8}.center-stage>h1{font-size:29px}.center-stage>.eyebrow{font-size:9px;letter-spacing:.16em}.encounter-enemies{gap:9px;margin:25px 0 20px}.encounter-enemies>article{width:98px}.encounter-enemies .creature{width:98px;height:113px}.encounter-enemies h3{font-size:14px}.encounter-summary{gap:8px}.encounter-summary .chip{font-size:11px}.center-actions{gap:10px}.center-actions>.btn{font-size:13px}.reward-cards{grid-template-columns:1fr;max-width:400px;gap:14px;margin:22px auto}.reward-cards .game-card{min-height:155px;padding:16px 15px 15px 90px}.reward-cards .card-art{position:absolute;left:17px;top:40px;width:53px;height:53px;margin:0}.reward-cards .card-art>.icon{width:28px;height:28px}.reward-cards .card-cost{width:25px;height:25px;min-width:25px;font-size:16px}.reward-cards .card-type{margin-top:6px}.reward-cards .card-bottom{margin-top:8px;padding-top:6px}.rest-choices{grid-template-columns:1fr;gap:14px}.result-stats{gap:20px;flex-wrap:wrap}.result-stats strong{font-size:28px}.result-stats small{font-size:11px}.result-screen .center-actions{flex-direction:column;max-width:270px;margin:auto}.battle-heading{margin:11px 0 13px}.battle-heading h2{font-size:20px}.battle-heading .eyebrow{font-size:9px;letter-spacing:.13em}.battle-round{flex-direction:column;gap:3px;font-size:10px;align-items:end}.battle-round .chip{font-size:11px}.battle-arena{grid-template-columns:76px minmax(0,1fr);gap:7px;min-height:250px;padding:13px 7px;border-radius:12px}.hero-portrait .creature{width:76px;height:117px}.hero-combatant h3{font-size:13px}.hero-combatant .combat-stats{font-size:11px}.combat-stats>span{margin-left:4px}.combat-stats .icon{width:12px;height:12px}.enemy-lineup{gap:3px;grid-template-columns:repeat(3,minmax(0,1fr))}.enemy-combatant{padding:5px 3px 8px;min-height:218px;border-radius:8px}.enemy-combatant .creature{height:95px;min-width:0;max-width:100%;margin-top:1px}.enemy-combatant h3{font-size:12px;line-height:1.6;min-height:37px;display:flex;align-items:center;justify-content:center}.intent{font-size:10px;padding:3px;min-height:34px;gap:2px;flex-wrap:wrap;line-height:1.5}.intent .icon{width:11px;height:11px}.health-number{font-size:10px;white-space:nowrap}.enemy-defense{font-size:9px}.enemy-defense>.icon{width:10px;height:10px}.status-chips{gap:3px;margin-top:4px}.status-chip{font-size:9px;padding:1px 3px;gap:2px}.status-chip .icon{width:10px;height:10px}.enemy-lineup.many-enemies{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.enemy-lineup.many-enemies .enemy-combatant .creature{height:100px}.enemy-lineup.many-enemies .enemy-combatant h3{min-height:20px}.battle-toolbar{gap:10px;padding-top:13px}.mana-display>span{width:31px;height:42px}.mana-display>span>.icon{width:17px}.mana-display strong{font-size:30px}.mana-display small{font-size:9px}.turn-controls{gap:7px}.turn-controls .btn{font-size:12px;padding:9px 11px;min-height:44px}.target-guide{font-size:10px;min-height:36px}.target-guide strong{font-size:12px}.hand-heading{gap:5px}.hand-heading strong{font-size:12px;white-space:nowrap}.hand-heading small{font-size:10px;margin-left:3px}.hand-heading .text-button{font-size:10px;padding:5px 4px;min-width:44px}.hand{gap:11px;padding:9px 4px 18px}.hand>.game-card{flex:0 0 158px;min-height:243px}.game-card{padding:12px;min-height:250px}.game-card h3{font-size:16px}.card-cost{width:26px;height:26px;min-width:26px;font-size:17px}.card-top{gap:6px}.card-art{width:59px;height:59px;margin:14px auto 11px}.card-art>.icon{width:31px;height:31px}.card-description{font-size:13px!important;line-height:1.65}.card-type{font-size:10px}.card-bottom{font-size:9px}.battle-log .log-list{columns:1;font-size:12px}.shop-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 13px}.shop-cards>section:last-child{grid-column:1/-1;max-width:200px;justify-self:center}.shop-cards .btn{font-size:12px;padding:9px 8px}.shop-services{grid-template-columns:1fr;gap:13px}.shop-services>.panel:last-child{grid-column:auto}.supply-list{grid-template-columns:1fr}.modal-body .catalog-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 10px}.modal-body .game-card{min-height:258px;padding:11px}.modal-body .game-card h3{font-size:16px}.modal-body .card-top{gap:5px}.modal-body .card-art{width:52px;height:52px}.modal-body .card-cost{width:24px;height:24px;min-width:24px}.modal-body .collection-label{font-size:10px}.catalog-filters{gap:10px}.catalog-filters label{font-size:12px}.catalog-filters select{font-size:12px;padding:8px 9px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Keep the hand and enemy intent within a desktop viewport. */
+@media(min-width:781px){.wide-shell .topbar{min-height:64px}.wide-shell .run-hud{padding:3px 0}.wide-shell .under-hud{min-height:44px;padding:0}.wide-shell .battle-heading{margin:8px 0}.wide-shell .battle-heading h2{font-size:22px}.wide-shell .battle-arena{min-height:250px;padding:12px 20px 15px}.wide-shell .hero-portrait .creature{height:125px;width:125px}.wide-shell .enemy-combatant{min-height:215px;padding:5px 8px 7px}.wide-shell .enemy-combatant .creature{height:106px;width:140px}.wide-shell .battle-toolbar{padding:10px 0 4px}.wide-shell .hand>.game-card{min-height:226px}.wide-shell .hand .card-art{width:55px;height:55px;margin:10px auto 9px}.wide-shell .hand .card-art>.icon{width:30px;height:30px}.wide-shell .hand .card-description{line-height:1.55}.wide-shell .hand-heading{min-height:40px}.wide-shell .hand-heading .text-button{padding-block:5px}.wide-shell .hand{padding-top:7px}}
+.explore-card small{font-size:13px}
+/* The dice itself is centered in the viewport; it retracts before choosing a route. */
+.topbar{position:relative;z-index:6}.dice-overlay{--die-edge:82px;position:fixed;inset:0;z-index:5;background:radial-gradient(ellipse at center,#102a25f5 0,#102a25d9 23%,#081b1599 55%,#081b1555);padding:0}.dice-overlay>.eyebrow{position:absolute;top:calc(50% - 100px);left:50%;transform:translateX(-50%);white-space:nowrap}.dice-overlay>.central-dice{position:absolute;left:50%;top:50%;transform:translate(-50%,calc(var(--die-edge)*-.5));padding:0;max-width:92vw;min-width:150px}.dice-overlay>.central-dice:active{transform:translate(-50%,calc(var(--die-edge)*-.5))}.dice-overlay>p:last-child{position:absolute;top:calc(50% + 123px);left:50%;transform:translateX(-50%);width:90%;text-align:center}.dice-overlay .dice-group{flex:none}.dice-overlay .die.large{width:var(--die-edge);height:var(--die-edge)}
+@media(max-width:550px){.dice-overlay{--die-edge:72px}.dice-overlay>.eyebrow{top:calc(50% - 90px)}.dice-overlay>p:last-child{top:calc(50% + 112px)}}
+@media(max-width:550px){.brand{flex-shrink:0}.brand small{white-space:nowrap;letter-spacing:.15em}}
+@media(max-width:360px){.brand-mark,.brand small{display:none}.topbar nav{gap:0}}
+
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <dialog id="modal" aria-labelledby="modal-title"></dialog>
+  <noscript>请启用 JavaScript 后游玩《骰契之塔》。</noscript>
+  <script type="module">
+const CARD_TYPES = {
+  step:{name:'点数',color:'#aa9669',icon:'arrow',phase:'explore'},
+  dice:{name:'骰数',color:'#9d8ac0',icon:'dice',phase:'explore'},
+  attack:{name:'攻势',color:'#bf715d',icon:'flame',phase:'battle'},
+  defense:{name:'防御',color:'#659b8b',icon:'shield',phase:'battle'},
+  skill:{name:'技能',color:'#7b9dbb',icon:'spark',phase:'battle'},
+  weapon:{name:'武器',color:'#bd9559',icon:'sword',phase:'battle'}
+};
+const CARDS = {
+  stride:{name:'疾行',type:'step',icon:'arrow',effect:'stride',text:'选择增加 1–3 步，消耗相同准备额度。',upgrade:'探索牌不强化'},
+  brake:{name:'蓄守',type:'step',icon:'shield',effect:'brake',text:'选择减少 1–3 步；每步为下一场战斗准备 2 格挡，最多 6。消耗相同额度。',upgrade:'探索牌不强化'},
+  steady:{name:'稳步',type:'step',icon:'castle',effect:'steady',text:'将本次移动步数固定为 4。消耗 1 准备额度。',upgrade:'探索牌不强化'},
+  lucky:{name:'六面契印',type:'step',icon:'star',effect:'lucky',text:'将本次移动步数固定为 6。消耗 2 准备额度。',upgrade:'探索牌不强化'},
+  focuswalk:{name:'收势',type:'step',icon:'sword',effect:'focuswalk',text:'减少 1 步，下场战斗首回合攻击 +2，不叠加。消耗 1 额度。',upgrade:'探索牌不强化'},
+  twin:{name:'双骰契约',type:'dice',icon:'copy',effect:'twin',text:'下一次探索改掷 2 颗骰子，点数相加。消耗 1 准备额度。',upgrade:'探索牌不强化'},
+  triple:{name:'三重命运',type:'dice',icon:'dice',effect:'triple',text:'下一次探索改掷 3 颗骰子，点数相加。消耗 2 准备额度。',upgrade:'探索牌不强化',unlock:12},
+  echo:{name:'琥珀回响',type:'dice',icon:'gem',effect:'echo',text:'下一次探索掷 2 颗骰子，每颗最低为 3。消耗 3 额度。',upgrade:'探索牌不强化',unlock:18},
+  sharpen:{name:'磨砺',type:'attack',cost:1,target:'self',icon:'sword',effect:'sharpen',text:'本场攻击力 +1。',upgrade:'改为攻击力 +2'},
+  fury:{name:'战意',type:'attack',cost:1,target:'self',icon:'flame',effect:'fury',text:'本回合攻击力 +4。',upgrade:'改为 +6'},
+  weaken:{name:'威慑',type:'attack',cost:1,target:'enemy',icon:'eye',effect:'weaken',text:'目标本场攻击力 -2，最低为 1。',upgrade:'改为 -3'},
+  roar:{name:'震慑',type:'attack',cost:2,target:'all',icon:'crown',effect:'roar',text:'所有敌人本场攻击力 -1，最低为 1。',upgrade:'改为 -2'},
+  expose:{name:'洞悉破绽',type:'attack',cost:1,target:'enemy',icon:'eye',effect:'expose',text:'目标防御 -2，并抽 1 张牌。',upgrade:'防御改为 -4'},
+  guard:{name:'守护',type:'defense',cost:1,target:'self',icon:'shield',effect:'guard',text:'获得 7 格挡，下回合开始清除。',upgrade:'改为 10 格挡'},
+  bulwark:{name:'铁壁',type:'defense',cost:2,target:'self',icon:'castle',effect:'bulwark',text:'本场防御 +1。防御加成上限为 4。',upgrade:'改为 +2'},
+  shatter:{name:'碎甲咒',type:'defense',cost:1,target:'enemy',icon:'axe',effect:'shatter',text:'目标本场防御 -3，最低为 0。',upgrade:'改为 -5'},
+  barrier:{name:'法术屏障',type:'defense',cost:1,target:'self',icon:'gem',effect:'barrier',text:'获得 1 层法术护盾，抵挡下次敌方技能的伤害与负面效果。最多 1 层。',upgrade:'同时获得 3 格挡'},
+  fortify:{name:'整备',type:'defense',cost:1,target:'self',icon:'heart',effect:'fortify',text:'获得 5 格挡，恢复 3 生命。消耗。',upgrade:'改为 8 格挡、5 生命',exhaust:true},
+  riposte:{name:'荆棘甲',type:'defense',cost:2,target:'self',icon:'thorn',effect:'riposte',text:'本场荆棘 +2；被攻击扣血后反伤。',upgrade:'改为 +3'},
+  fireball:{name:'火球',type:'skill',cost:1,target:'enemy',icon:'flame',effect:'fireball',text:'造成 10 法术伤害。',upgrade:'改为 14'},
+  meteor:{name:'陨星',type:'skill',cost:3,target:'enemy',icon:'star',effect:'meteor',text:'造成 24 法术伤害。',upgrade:'改为 32',unlock:16},
+  storm:{name:'雷暴',type:'skill',cost:2,target:'all',icon:'spark',effect:'storm',text:'对所有敌人造成 8 法术伤害。',upgrade:'改为 11'},
+  poison:{name:'毒雾针',type:'skill',cost:1,target:'enemy',icon:'leaf',effect:'poison',text:'施加 4 中毒。敌方行动前触发，无视防御与格挡，之后减 1。',upgrade:'改为 6'},
+  frost:{name:'霜缚',type:'skill',cost:1,target:'enemy',icon:'drop',effect:'frost',text:'造成 4 法术伤害，并施加 2 虚弱；每层削弱一次攻击 2 点。',upgrade:'伤害 7，虚弱 3'},
+  insight:{name:'灵感',type:'skill',cost:1,target:'self',icon:'book',effect:'insight',text:'抽 2 张牌。',upgrade:'改为抽 3'},
+  recall:{name:'回溯',type:'skill',cost:1,target:'discard',icon:'rotate',effect:'recall',text:'选择弃牌堆中一张其他牌回到手中。',upgrade:'同时抽 1 张牌'},
+  bloodpact:{name:'血契',type:'skill',cost:0,target:'self',icon:'drop',effect:'bloodpact',text:'失去 4 生命，恢复 2 蓝。不能致死。消耗。',upgrade:'生命代价改为 2',exhaust:true,unlock:10},
+  chain:{name:'连锁闪电',type:'skill',cost:2,target:'enemy',icon:'spark',effect:'chain',text:'目标受到 10 法术伤害，另一名敌人受到 5。',upgrade:'改为 14 与 7',unlock:14},
+  leech:{name:'汲取',type:'skill',cost:2,target:'enemy',icon:'heart',effect:'leech',text:'造成 9 法术伤害，恢复 4 生命。消耗。',upgrade:'改为 13 伤害、6 生命',exhaust:true},
+  embers:{name:'余烬仪式',type:'skill',cost:1,target:'all',icon:'flame',effect:'embers',text:'所有敌人获得 2 中毒。消耗。',upgrade:'改为 4',exhaust:true,unlock:12},
+  slash:{name:'斩击',type:'weapon',cost:1,target:'enemy',icon:'sword',effect:'slash',power:2,text:'发动一次武器攻击：攻击力 +2。',upgrade:'武器威力改为 +5'},
+  heavy:{name:'重斩',type:'weapon',cost:2,target:'enemy',icon:'axe',effect:'heavy',power:7,text:'发动一次重击：攻击力 +7。',upgrade:'威力改为 +12'},
+  volley:{name:'连弩',type:'weapon',cost:1,target:'enemy',icon:'arrow',effect:'volley',power:0,hits:2,text:'连续攻击 2 次，每次等于攻击力，分别计算防御。',upgrade:'改为连续 3 次'},
+  pierce:{name:'穿刺',type:'weapon',cost:1,target:'enemy',icon:'arrow',effect:'pierce',power:1,text:'造成攻击力 +1 的物理伤害，无视防御。',upgrade:'威力改为 +4'},
+  sweep:{name:'横扫',type:'weapon',cost:2,target:'all',icon:'sword',effect:'sweep',power:0,text:'对每名敌人发动一次等于攻击力的武器攻击。',upgrade:'每次威力 +3',unlock:14},
+  bash:{name:'盾击',type:'weapon',cost:1,target:'enemy',icon:'shield',effect:'bash',text:'造成攻击力 + 当前格挡的物理伤害，保留格挡。',upgrade:'威力额外 +4',unlock:10}
+};
+const STARTER_DECK=['slash','slash','slash','guard','guard','guard','fireball','sharpen','weaken','insight'];
+const RELICS = {
+ ember:{name:'炽火徽记',icon:'flame',text:'每场战斗首回合攻击力 +2。'},
+ pouch:{name:'旅人药囊',icon:'heart',text:'每次战斗胜利后恢复 4 生命。'},
+ coin:{name:'旧王钱币',icon:'coin',text:'战斗胜利额外获得 10 金币。'},
+ amber:{name:'琥珀骰心',icon:'dice',text:'探索掷骰时，每颗骰子的结果最低为 2。'},
+ crown:{name:'棘冠',icon:'thorn',text:'每场战斗开始获得 1 荆棘。'},
+ feather:{name:'银羽',icon:'feather',text:'每层探索准备额度从 3 提高至 4。'},
+ obsidian:{name:'黑曜石',icon:'gem',text:'每回合第一张武器牌的首段伤害 +2。'},
+ branch:{name:'生命枝',icon:'leaf',text:'获得时生命上限 +12，并恢复 12 生命。'}
+};
+const ENEMIES = {
+ slime:{name:'苔石史莱姆',art:'slime',color:'#8cae83',hp:19,atk:4,def:0,pattern:[{type:'attack'},{type:'guard',value:5},{type:'attack',bonus:2}]},
+ bandit:{name:'迷途盗贼',art:'rogue',color:'#c99175',hp:22,atk:5,def:0,pattern:[{type:'attack'},{type:'weak',value:1,skill:true},{type:'attack',bonus:2}]},
+ sentinel:{name:'铜壳卫兵',art:'knight',color:'#c0a16b',hp:29,atk:6,def:2,pattern:[{type:'guard',value:7},{type:'attack'},{type:'attack',bonus:2}]},
+ wisp:{name:'幽灯',art:'wisp',color:'#84c8c4',hp:17,atk:4,def:0,pattern:[{type:'magic',skill:true},{type:'poison',value:2,skill:true},{type:'attack'}]},
+ spider:{name:'织毒蛛',art:'spider',color:'#b29acb',hp:23,atk:5,def:1,pattern:[{type:'poison',value:2,skill:true},{type:'attack'},{type:'guard',value:4}]},
+ archer:{name:'契印射手',art:'rogue',color:'#b59a72',hp:24,atk:4,def:0,pattern:[{type:'multi',hits:2,skill:true},{type:'guard',value:4},{type:'attack',bonus:3}]},
+ monk:{name:'失声修士',art:'mage',color:'#aaa2c7',hp:26,atk:5,def:1,pattern:[{type:'heal',value:5,skill:true},{type:'magic',skill:true},{type:'weak',value:2,skill:true}]},
+ beast:{name:'裂牙兽',art:'beast',color:'#c08476',hp:32,atk:7,def:1,pattern:[{type:'attack'},{type:'guard',value:3},{type:'attack',bonus:4}]},
+ gatekeeper:{name:'裂甲守卫',art:'boss',color:'#c9a25c',hp:68,atk:8,def:3,pattern:[{type:'guard',value:10},{type:'multi',hits:2,skill:true},{type:'attack',bonus:4}]},
+ oracle:{name:'命运司祭',art:'oracle',color:'#b6a0d1',hp:106,atk:10,def:2,pattern:[{type:'magic',skill:true},{type:'poison',value:3,skill:true},{type:'guard',value:12},{type:'multi',hits:2,skill:true}]}
+};
+
+
+
+const SAVE_VERSION=2;
+const DIRECTIONS=[[0,-1],[1,0],[0,1],[-1,0]];
+const MAP_TEMPLATES=[
+ ['#########','#..#....#','#..#.#..#','#....#..#','#..#....#','#.......#','#.#.##..#','#.......#','#########'],
+ ['#########','#.......#','#..#.#..#','#..#.#..#','#.......#','#.##.#..#','#.......#','#.......#','#########'],
+ ['#########','#.......#','#.#.#...#','#...#...#','#.......#','#.#...#.#','#...#...#','#.......#','#########']
+];
+function rule(condition,message){if(!condition)throw new Error(message);}
+function random(run){run.rng=(run.rng+0x6D2B79F5)>>>0;let t=run.rng;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296;}
+function choose(run,values){return values[Math.floor(random(run)*values.length)];}
+function shuffled(run,values){const out=[...values];for(let i=out.length-1;i>0;i--){const j=Math.floor(random(run)*(i+1));[out[i],out[j]]=[out[j],out[i]];}return out;}
+function hasRelic(run,id){return run.relics.includes(id);}
+function logRun(run,message){run.log.push(message);run.log=run.log.slice(-40);}
+function uid(run,prefix){return `${prefix}${++run.serial}`;}
+function healPlayer(run,amount){const value=Math.min(amount,run.player.maxHp-run.player.hp);run.player.hp+=value;return value;}
+function addCard(game,id){const run=game.run;run.deck.push({uid:uid(run,'c'),id,level:0});game.profile.collection[id]=(game.profile.collection[id]||0)+1;}
+function addRelic(run,id){if(!id)return;run.relics.push(id);if(id==='branch'){run.player.maxHp+=12;healPlayer(run,12);}if(id==='feather')currentFloor(run).charges++;logRun(run,`获得遗物：${RELICS[id].name}`);}
+function randomRelic(run){const pool=Object.keys(RELICS).filter(id=>!hasRelic(run,id));return pool.length?choose(run,pool):null;}
+function createGame(){return {version:SAVE_VERSION,profile:{gold:0,unlocked:Object.keys(CARDS).filter(id=>!CARDS[id].unlock),collection:{},bestFloor:0,wins:0,runs:0},run:null};}
+function currentFloor(run){return run.floors[run.floor];}
+function aliveEnemies(run){return run.battle?.enemies.filter(e=>e.hp>0)||[];}
+function adjacentGroups(run,x=run.player.x,y=run.player.y){return currentFloor(run).groups.filter(g=>!g.defeated&&Math.abs(g.x-x)+Math.abs(g.y-y)===1);}
+function createFloor(run,number){
+ const tiles=MAP_TEMPLATES[(number-1)%MAP_TEMPLATES.length].map(row=>row.split(''));
+ const floor={number,tiles,charges:hasRelic(run,'feather')?4:3,banked:false,restUsed:false,shop:null,items:[],groups:[],position:{x:1,y:7}};
+ for(const [x,y,type,color] of [[3,3,'door','yellow'],[6,4,'door','blue']])tiles[y][x]=color==='yellow'?'Y':'B';
+ const item=(x,y,type,data={})=>{tiles[y][x]='.';floor.items.push({id:`${number}-${type}-${x}-${y}`,x,y,type,taken:false,...data});};
+ item(2,5,'key',{color:'yellow'});item(5,7,'key',{color:'blue'});item(1,3,'chest',{gold:18+number*2});
+ item(6,3,'chest',{gold:22+number*2,locked:true,color:'blue'});item(7,4,'potion',{kind:'heal'});
+ item(2,1,'gem',{stat:'hp'});item(5,1,'gem',{stat:'atk'});
+ tiles[1][1]='M';tiles[7][7]='R';tiles[1][7]='>';tiles[7][1]=number>1?'<':'.';
+ const group=(id,x,y,kinds,options={})=>{tiles[y][x]='.';floor.groups.push({id:`f${number}-${id}`,x,y,kinds,defeated:false,...options});};
+ group('entry',3,7,number===1?['slime','bandit','wisp']:shuffled(run,['slime','bandit','spider','archer']).slice(0,3),{name:'游荡者小队',scale:number===1?.72:.86});
+ group('treasure',2,3,number%2?['sentinel','monk']:['spider','archer','bandit'],{name:'宝物守卫',elite:true,scale:.95});
+ group('patrol',6,6,['beast','wisp'],{name:'巡逻守卫',patrol:true,patrolIndex:0,route:[[6,6],[7,6],[7,5],[6,5]],scale:.82});
+ group('seal',6,2,number===12?['oracle','monk','archer']:number===6?['gatekeeper','sentinel','wisp']:number<4?['sentinel','slime']:['sentinel','archer','monk'],{name:number===12?'最后的契约':number===6?'黄铜之誓':'楼梯守门人',seal:true,boss:number===6||number===12,scale:1});
+ return floor;
+}
+function beginRun(game,seed){
+ const profile=game.profile;profile.runs++;
+ const run={id:`${Date.now()}-${profile.runs}`,seed:Number(seed)>>>0,rng:Number(seed)>>>0,serial:0,startedAt:Date.now(),finishedAt:null,floor:1,phase:'explore',floors:{},
+  player:{x:1,y:7,hp:70,maxHp:70,atk:6,def:1,gold:30,keys:{yellow:1,blue:0},potions:{heal:1,mana:0}},
+  explore:{turn:1,rolled:false,dice:[],steps:0,nextDice:1,nextMin:1},prep:{block:0,atk:0},deck:[],relics:[],battle:null,encounter:null,reward:null,log:[],
+  stats:{kills:0,battles:0,rounds:0,moves:0,removals:0,banked:0},feedback:null};
+ game.run=run;run.floors[1]=createFloor(run,1);STARTER_DECK.forEach(id=>addCard(game,id));profile.bestFloor=Math.max(profile.bestFloor,1);
+ logRun(run,'一颗骰子，一位旅人。寻找钥匙与宝物，击败楼梯守门人。');
+}
+function canEnter(run,x,y){
+ const floor=currentFloor(run),tile=floor.tiles[y]?.[x];
+ if(!tile||tile==='#'||floor.groups.some(g=>!g.defeated&&g.x===x&&g.y===y))return false;
+ if(tile==='Y'&&!run.player.keys.yellow||tile==='B'&&!run.player.keys.blue)return false;
+ return true;
+}
+function pathsFrom(run,limit=run.explore.steps){
+ const start={x:run.player.x,y:run.player.y},paths=new Map([[`${start.x},${start.y}`,[start]]]),queue=[start];
+ for(let i=0;i<queue.length;i++){
+  const p=queue[i],path=paths.get(`${p.x},${p.y}`);
+  if(path.length-1>=limit||path.length>1&&(adjacentGroups(run,p.x,p.y).length||currentFloor(run).tiles[p.y][p.x]==='M'||currentFloor(run).tiles[p.y][p.x]==='R'&&!currentFloor(run).restUsed))continue;
+  for(const [dx,dy] of DIRECTIONS){const x=p.x+dx,y=p.y+dy,key=`${x},${y}`;if(!paths.has(key)&&canEnter(run,x,y)){paths.set(key,[...path,{x,y}]);queue.push({x,y});}}
+ }
+ return paths;
+}
+function movePath(run,x,y){return pathsFrom(run).get(`${x},${y}`)||null;}
+function explorationCost(id,amount=1){return ['stride','brake'].includes(id)?Number(amount):{steady:1,lucky:2,focuswalk:1,twin:1,triple:2,echo:3}[id];}
+function canExploreCard(game,id,amount=1){
+ const r=game.run,d=CARDS[id];
+ if(!r||r.phase!=='explore'||!r.explore.rolled)return {ok:false,reason:'先点击中央骰子，掷出本回合点数。'};
+ if(!d||CARD_TYPES[d.type].phase!=='explore'||!game.profile.unlocked.includes(id))return {ok:false,reason:'这张探索牌尚未解锁。'};
+ const n=Number(amount),cost=explorationCost(id,n);
+ if(!Number.isInteger(n)||n<1||n>3)return {ok:false,reason:'请选择 1–3 步。'};
+ if(currentFloor(r).charges<cost)return {ok:false,reason:'本层准备额度不足；上楼会获得新额度。'};
+ if(['brake','focuswalk'].includes(id)&&r.explore.steps<(id==='brake'?n:1))return {ok:false,reason:'剩余步数不足以支付这次调整。'};
+ if(id==='steady'&&r.explore.steps===4||id==='lucky'&&r.explore.steps===6)return {ok:false,reason:'已经是这个点数，不需要消耗卡牌额度。'};
+ if(['twin','triple','echo'].includes(id)){
+  const count=id==='triple'?3:2,min=id==='echo'?3:1;
+  if(r.explore.nextDice>=count&&r.explore.nextMin>=min)return {ok:false,reason:'下一次掷骰已有相同或更强的契约。'};
+ }
+ return {ok:true,cost};
+}
+function useExploreCard(game,id,amount){
+ const r=game.run,n=Number(amount||1),check=canExploreCard(game,id,n);rule(check.ok,check.reason);currentFloor(r).charges-=check.cost;
+ switch(id){
+ case 'stride':r.explore.steps+=n;break;
+ case 'brake':r.explore.steps-=n;r.prep.block=Math.min(6,r.prep.block+2*n);break;
+ case 'steady':r.explore.steps=4;break;
+ case 'lucky':r.explore.steps=6;break;
+ case 'focuswalk':r.explore.steps--;r.prep.atk=2;break;
+ default:r.explore.nextDice=Math.max(r.explore.nextDice,id==='triple'?3:2);r.explore.nextMin=Math.max(r.explore.nextMin,id==='echo'?3:1);
+ }
+ logRun(r,`${CARDS[id].name}：本次 ${r.explore.steps} 步，下次 ${r.explore.nextDice} 颗骰子`);
+}
+function setEncounter(run,groups){run.encounter={groupIds:groups.map(g=>g.id)};run.phase='encounter';run.explore.rolled=false;run.explore.steps=0;}
+function patrol(run){
+ const floor=currentFloor(run);for(const group of floor.groups.filter(g=>g.patrol&&!g.defeated)){
+  const index=(group.patrolIndex+1)%group.route.length,[x,y]=group.route[index];
+  if(floor.tiles[y][x]!=='#'&&(x!==run.player.x||y!==run.player.y)&&!floor.groups.some(g=>g!==group&&!g.defeated&&g.x===x&&g.y===y)){group.x=x;group.y=y;group.patrolIndex=index;}
+ }
+ const adjacent=adjacentGroups(run);if(adjacent.length)setEncounter(run,adjacent);
+}
+function endExplorationTurn(run){run.explore.rolled=false;run.explore.steps=0;run.explore.turn++;if(run.phase==='explore')patrol(run);}
+function shopFor(game){
+ const r=game.run,f=currentFloor(r);if(f.shop)return f.shop;
+ const ids=shuffled(r,game.profile.unlocked.filter(id=>CARD_TYPES[CARDS[id].type].phase==='battle'));
+ f.shop={cards:ids.slice(0,3).map((id,i)=>({id,price:30+i*10,bought:false})),relic:{id:randomRelic(r),price:75,bought:false},removed:false,upgraded:false,supplies:{heal:0,mana:0,yellow:0,blue:0}};
+ return f.shop;
+}
+function collectTile(game){
+ const r=game.run,f=currentFloor(r),p=r.player;
+ for(const item of f.items.filter(v=>!v.taken&&v.x===p.x&&v.y===p.y)){
+  if(item.locked){if(!p.keys[item.color]){logRun(r,'这只宝箱需要一把蓝钥匙，拿到后可以回来。');continue;}p.keys[item.color]--;}
+  item.taken=true;
+  if(item.type==='key'){p.keys[item.color]++;logRun(r,`拾取${item.color==='blue'?'蓝':'黄'}钥匙`);}
+  if(item.type==='potion'){p.potions[item.kind]++;logRun(r,'收好一瓶治疗药水');}
+  if(item.type==='chest'){p.gold+=item.gold;p.potions.mana++;f.charges=Math.min(hasRelic(r,'feather')?4:3,f.charges+1);logRun(r,`宝箱：${item.gold} 金币、1 瓶蓝药、恢复 1 准备额度`);}
+  if(item.type==='gem'){if(item.stat==='atk'){p.atk++;logRun(r,'拾取剑之结晶，本局基础攻击 +1');}else{p.maxHp+=5;healPlayer(r,10);logRun(r,'拾取生命结晶，生命上限 +5，恢复最多 10 生命');}}
+ }
+ const tile=f.tiles[p.y][p.x];
+ if(tile==='M'){shopFor(game);r.phase='shop';}
+ if(tile==='R'&&!f.restUsed)r.phase='rest';
+}
+function movePlayer(game,x,y){
+ const r=game.run;rule(r.phase==='explore'&&r.explore.rolled,'请先点击中央骰子。');
+ const path=movePath(r,x,y);rule(path&&path.length>1,'请选择蓝色范围内的另一格。');
+ for(const point of path.slice(1)){
+  const tile=currentFloor(r).tiles[point.y][point.x];
+  if(tile==='Y'||tile==='B'){const color=tile==='Y'?'yellow':'blue';rule(r.player.keys[color]>0,'缺少对应钥匙。');r.player.keys[color]--;currentFloor(r).tiles[point.y][point.x]='.';logRun(r,`使用${color==='yellow'?'黄':'蓝'}钥匙开门`);}
+  r.player.x=point.x;r.player.y=point.y;r.stats.moves++;
+  const groups=adjacentGroups(r);if(groups.length){setEncounter(r,groups);break;}
+  collectTile(game);if(r.phase!=='explore')break;
+ }
+ logRun(r,`抵达 ${String.fromCharCode(65+r.player.x)}${r.player.y+1}`);endExplorationTurn(r);
+}
+function makeEnemy(run,kind,index,scale){
+ const d=ENEMIES[kind],growth=1+(run.floor-1)*.065;
+ const hp=Math.max(8,Math.round(d.hp*growth*scale));
+ return {uid:uid(run,'e'),kind,hp,maxHp:hp,atk:Math.max(1,Math.round(d.atk*(1+(run.floor-1)*.035)*scale)),def:d.def,block:0,poison:0,weak:0,atkDown:0,defDown:0,index};
+}
+function drawCards(run,amount){
+ const b=run.battle;for(let i=0;i<amount&&b.hand.length<10;i++){
+  if(!b.draw.length){b.draw=shuffled(run,b.discard);b.discard=[];}
+  if(!b.draw.length)break;b.hand.push(b.draw.pop());
+ }
+}
+function beginBattle(game){
+ const r=game.run;rule(r.phase==='encounter'&&r.encounter,'没有待开始的遭遇。');
+ const groups=currentFloor(r).groups.filter(g=>r.encounter.groupIds.includes(g.id)&&!g.defeated);rule(groups.length,'这组敌人已被击败。');
+ const enemies=groups.flatMap(g=>g.kinds.map((kind,index)=>makeEnemy(r,kind,index,g.scale)));
+ r.battle={turn:1,enemies,groupIds:groups.map(g=>g.id),mana:3,maxMana:3,draw:shuffled(r,r.deck.map(c=>c.uid)),hand:[],discard:[],exhaust:[],basicUsed:false,block:4+r.prep.block,
+  atkBonus:0,defBonus:0,turnAtk:r.prep.atk+(hasRelic(r,'ember')?2:0),spellShield:0,poison:0,weak:0,thorns:hasRelic(r,'crown')?1:0,relicHitUsed:false};
+ r.prep={block:0,atk:0};r.phase='battle';drawCards(r,5);logRun(r,`交战：${enemies.map(e=>ENEMIES[e.kind].name).join('、')}。稳阵被动提供 4 格挡。`);
+}
+function playerAttack(run){return run.player.atk+(run.battle?.atkBonus||0)+(run.battle?.turnAtk||0);}
+function playerDefense(run){return run.player.def+(run.battle?.defBonus||0);}
+function enemyIntent(run,enemy){
+ const raw=ENEMIES[enemy.kind].pattern[(run.battle.turn-1)%ENEMIES[enemy.kind].pattern.length];
+ const value=['attack','multi','magic'].includes(raw.type)?Math.max(1,enemy.atk-enemy.atkDown+(raw.bonus||0)):raw.value;
+ const hits=raw.hits||1,values=Array.from({length:hits},(_,i)=>Math.max(1,value-(enemy.weak>i?2:0)));
+ const names={attack:`普攻 ${values[0]}`,multi:`技能 · ${values.join('＋')}`,magic:`法术 ${values[0]}`,guard:`格挡 ${value}`,poison:`技能 · 中毒 ${value}`,weak:`技能 · 虚弱 ${value}`,heal:`技能 · 治疗 ${value}`};
+ return {...raw,value,label:names[raw.type]};
+}
+function lose(game){
+ const r=game.run;r.phase='lost';r.finishedAt=Date.now();r.lostGold=r.player.gold;r.player.gold=0;r.player.keys={yellow:0,blue:0};r.player.potions={heal:0,mana:0};
+ logRun(r,'旅程结束。本局资源清空，营地金币、解锁与收藏保留。');
+}
+function bankFloor(game){const r=game.run,f=currentFloor(r);if(f.banked)return;const amount=8+r.floor;f.banked=true;game.profile.gold+=amount;r.stats.banked+=amount;logRun(r,`楼层结算：${amount} 金币存入营地，不会因本局失败丢失。`);}
+function winBattle(game){
+ const r=game.run,b=r.battle;rule(r.phase==='battle','战斗已经结束。');
+ const groups=currentFloor(r).groups.filter(g=>b.groupIds.includes(g.id));groups.forEach(g=>g.defeated=true);
+ const gold=15+b.enemies.length*6+(groups.some(g=>g.elite)?12:0)+(hasRelic(r,'coin')?10:0);
+ r.player.gold+=gold;r.stats.kills+=b.enemies.length;r.stats.battles++;
+ const recovered=hasRelic(r,'pouch')?healPlayer(r,4):0;
+ const relic=groups.some(g=>g.boss||g.elite)?randomRelic(r):null;if(relic)addRelic(r,relic);
+ if(random(r)<.25)r.player.potions.heal++;
+ logRun(r,`战斗胜利！获得 ${gold} 金币${recovered?`，恢复 ${recovered} 生命`:''}`);
+ if(r.floor===12&&groups.some(g=>g.seal)){
+  bankFloor(game);r.phase='won';r.finishedAt=Date.now();game.profile.wins++;logRun(r,'十二层契印碎裂。你走出了高塔。');return;
+ }
+ const cards=shuffled(r,game.profile.unlocked.filter(id=>CARD_TYPES[CARDS[id].type].phase==='battle')).slice(0,3);
+ r.reward={gold,healed:recovered,relic,cards};r.phase='reward';
+}
+function battleEndCheck(game){
+ const r=game.run;if(r.player.hp<=0){r.player.hp=0;lose(game);return true;}
+ if(!aliveEnemies(r).length){winBattle(game);return true;}return false;
+}
+function hitEnemy(run,enemy,amount,{magic=false,pierce=false}={}){
+ if(enemy.hp<=0)return 0;let damage=amount;
+ if(!magic){if(run.battle.weak){damage=Math.max(1,damage-2);run.battle.weak--;}damage=Math.max(1,damage-(pierce?0:Math.max(0,enemy.def-enemy.defDown)));}
+ const blocked=Math.min(enemy.block,damage);enemy.block-=blocked;const actual=Math.min(enemy.hp,damage-blocked);enemy.hp-=actual;return actual;
+}
+function feedback(run,type,value=0,target=null){run.feedback={serial:uid(run,'fx'),type,value,target};}
+function canPlay(game,cardUid,targetId,discardUid){
+ const r=game.run;if(!r||r.phase!=='battle')return {ok:false,reason:'当前不在战斗中。'};
+ const b=r.battle,card=r.deck.find(c=>c.uid===cardUid),d=card&&CARDS[card.id];
+ if(!card||!b.hand.includes(cardUid))return {ok:false,reason:'这张牌不在当前手牌中。'};
+ if(b.mana<d.cost)return {ok:false,reason:`需要 ${d.cost} 蓝，当前只有 ${b.mana}。`};
+ if(d.target==='enemy'&&!b.enemies.some(e=>e.uid===targetId&&e.hp>0))return {ok:false,reason:'请选择一名仍存活的敌人。'};
+ if(d.effect==='recall'&&!b.discard.some(id=>id!==cardUid&&r.deck.find(c=>c.uid===id)?.id!=='recall'))return {ok:false,reason:'弃牌堆里还没有可以回收的牌。'};
+ if(discardUid&&(!b.discard.includes(discardUid)||r.deck.find(c=>c.uid===discardUid)?.id==='recall'))return {ok:false,reason:'请选择弃牌堆中另一张牌。'};
+ if(d.effect==='bloodpact'&&(r.player.hp<=(card.level?2:4)||b.mana>=b.maxMana))return {ok:false,reason:'血契需要足够生命，并且蓝量尚未满。'};
+ if(d.effect==='barrier'&&b.spellShield&& !card.level)return {ok:false,reason:'已经有一层法术护盾。'};
+ return {ok:true};
+}
+function playCard(game,cardUid,targetId,discardUid){
+ const r=game.run,check=canPlay(game,cardUid,targetId,discardUid);rule(check.ok,check.reason);
+ const b=r.battle,card=r.deck.find(c=>c.uid===cardUid),d=CARDS[card.id],up=card.level?1:0;
+ const target=b.enemies.find(e=>e.uid===targetId&&e.hp>0);b.mana-=d.cost;b.hand=b.hand.filter(id=>id!==cardUid);
+ let total=0;
+ if(d.type==='weapon'){
+  let power=(d.power||0)+({slash:3,heavy:5,pierce:3,sweep:3,bash:4}[d.effect]||0)*up;
+  if(d.effect==='bash')power+=b.block;
+  const targets=d.target==='all'?aliveEnemies(r):[target];let relicBonus=hasRelic(r,'obsidian')&&!b.relicHitUsed?2:0;
+  for(const enemy of targets)for(let i=0;i<(d.effect==='volley'?2+up:1)&&enemy.hp>0;i++){
+   total+=hitEnemy(r,enemy,playerAttack(r)+power+relicBonus,{pierce:d.effect==='pierce'});relicBonus=0;
+  }
+  b.relicHitUsed=true;
+ }else switch(d.effect){
+  case 'sharpen':b.atkBonus+=1+up;break;
+  case 'fury':b.turnAtk+=4+up*2;break;
+  case 'weaken':target.atkDown=Math.min(target.atk-1,target.atkDown+2+up);break;
+  case 'roar':aliveEnemies(r).forEach(e=>e.atkDown=Math.min(e.atk-1,e.atkDown+1+up));break;
+  case 'expose':target.defDown=Math.min(target.def,target.defDown+2+up*2);drawCards(r,1);break;
+  case 'guard':b.block+=7+up*3;break;
+  case 'bulwark':b.defBonus=Math.min(4,b.defBonus+1+up);break;
+  case 'shatter':target.defDown=Math.min(target.def,target.defDown+3+up*2);break;
+  case 'barrier':b.spellShield=1;if(up)b.block+=3;break;
+  case 'fortify':b.block+=5+up*3;healPlayer(r,3+up*2);break;
+  case 'riposte':b.thorns+=2+up;break;
+  case 'fireball':total+=hitEnemy(r,target,10+up*4,{magic:true});break;
+  case 'meteor':total+=hitEnemy(r,target,24+up*8,{magic:true});break;
+  case 'storm':aliveEnemies(r).forEach(e=>total+=hitEnemy(r,e,8+up*3,{magic:true}));break;
+  case 'poison':target.poison+=4+up*2;break;
+  case 'frost':total+=hitEnemy(r,target,4+up*3,{magic:true});target.weak+=2+up;break;
+  case 'insight':drawCards(r,2+up);break;
+  case 'recall':{
+   const chosen=discardUid||b.discard.find(id=>r.deck.find(c=>c.uid===id).id!=='recall');
+   rule(b.discard.includes(chosen),'这张牌不在弃牌堆。');b.discard=b.discard.filter(id=>id!==chosen);if(b.hand.length<10)b.hand.push(chosen);else b.discard.push(chosen);if(up)drawCards(r,1);break;
+  }
+  case 'bloodpact':r.player.hp-=up?2:4;b.mana=Math.min(b.maxMana,b.mana+2);break;
+  case 'chain':{
+   const other=aliveEnemies(r).find(e=>e.uid!==target.uid);total+=hitEnemy(r,target,10+up*4,{magic:true});if(other)total+=hitEnemy(r,other,5+up*2,{magic:true});break;
+  }
+  case 'leech':total+=hitEnemy(r,target,9+up*4,{magic:true});healPlayer(r,4+up*2);break;
+  case 'embers':aliveEnemies(r).forEach(e=>e.poison+=2+up*2);break;
+ }
+ (d.exhaust?b.exhaust:b.discard).push(cardUid);
+ logRun(r,`${d.name}${card.level?'⁺':''}${target?' → '+ENEMIES[target.kind].name:''}${total?`，造成 ${total} 伤害`:''}`);
+ feedback(r,total?'hit':'buff',total,target?.uid);battleEndCheck(game);
+}
+function hitPlayer(run,enemy,amount,magic){
+ const b=run.battle;let damage=amount;
+ if(enemy.weak){damage=Math.max(1,damage-2);enemy.weak--;}
+ damage=Math.max(1,damage-(magic?0:playerDefense(run)));
+ const absorbed=Math.min(b.block,damage);b.block-=absorbed;const actual=Math.min(run.player.hp,damage-absorbed);run.player.hp-=actual;
+ if(actual&&b.thorns)enemy.hp=Math.max(0,enemy.hp-b.thorns);
+ return actual;
+}
+function endBattleTurn(game){
+ const r=game.run;rule(r.phase==='battle','当前不在战斗中。');const b=r.battle;r.stats.rounds++;
+ b.discard.push(...b.hand);b.hand=[];
+ for(const e of aliveEnemies(r))if(e.poison){const damage=Math.min(e.hp,e.poison);e.hp-=damage;e.poison--;logRun(r,`${ENEMIES[e.kind].name} 中毒，失去 ${damage} 生命`);}
+ if(battleEndCheck(game))return;
+ let total=0;
+ for(const enemy of aliveEnemies(r)){
+  if(enemy.hp<=0)continue;
+  enemy.block=0;const intent=enemyIntent(r,enemy);
+  if(intent.skill&&['magic','poison','weak','multi'].includes(intent.type)&&b.spellShield){b.spellShield=0;logRun(r,`法术护盾抵挡了${ENEMIES[enemy.kind].name}的技能`);continue;}
+  if(['attack','multi','magic'].includes(intent.type)){
+   let hurt=0;for(let i=0;i<(intent.hits||1)&&enemy.hp>0&&r.player.hp>0;i++)hurt+=hitPlayer(r,enemy,intent.value,intent.type==='magic');
+   total+=hurt;logRun(r,`${ENEMIES[enemy.kind].name} ${intent.label}，实际扣血 ${hurt}`);
+  }else if(intent.type==='guard')enemy.block+=intent.value;
+  else if(intent.type==='poison')b.poison+=intent.value;
+  else if(intent.type==='weak')b.weak+=intent.value;
+  else if(intent.type==='heal'){
+   const ally=aliveEnemies(r).sort((a,c)=>a.hp/a.maxHp-c.hp/c.maxHp)[0];ally.hp=Math.min(ally.maxHp,ally.hp+intent.value);logRun(r,`${ENEMIES[enemy.kind].name} 为同伴恢复生命`);
+  }
+  if(battleEndCheck(game))return;
+ }
+ if(b.poison){const damage=Math.min(r.player.hp,b.poison);r.player.hp-=damage;b.poison--;total+=damage;logRun(r,`你受到 ${damage} 中毒伤害`);}
+ if(battleEndCheck(game))return;
+ b.turn++;b.mana=Math.min(b.maxMana,b.mana+3);b.block=0;b.turnAtk=0;b.basicUsed=false;b.relicHitUsed=false;drawCards(r,5);feedback(r,'hurt',total);
+}
+function upgradeCard(game,cardUid,rest=false){
+ const r=game.run,card=r.deck.find(c=>c.uid===cardUid);rule(card&&!card.level,'请选择一张未强化卡。');
+ if(rest){rule(r.phase==='rest'&&!currentFloor(r).restUsed,'本层篝火已使用。');currentFloor(r).restUsed=true;r.phase='explore';}
+ else {rule(r.phase==='shop','请在商店强化。');const s=shopFor(game);rule(!s.upgraded&&r.player.gold>=40,'本店已强化，或金币不足 40。');s.upgraded=true;r.player.gold-=40;}
+ card.level=1;logRun(r,`强化了${CARDS[card.id].name}：${CARDS[card.id].upgrade}`);
+}
+function changeFloor(game,direction){
+ const r=game.run,f=currentFloor(r),p=r.player;
+ rule(r.phase==='explore','请先完成当前房间。');
+ if(direction===1){rule(p.x===7&&p.y===1,'请先走到上行楼梯。');rule(f.groups.find(g=>g.seal).defeated,'楼梯封印尚未解除，请击败守门人。');rule(r.floor<12,'已是塔顶。');bankFloor(game);}
+ else rule(r.floor>1&&p.x===1&&p.y===7,'请走到下行楼梯。');
+ f.position={x:p.x,y:p.y};r.floor+=direction;if(!r.floors[r.floor])r.floors[r.floor]=createFloor(r,r.floor);
+ const next=currentFloor(r);p.x=direction===1?1:7;p.y=direction===1?7:1;
+ r.explore.rolled=false;r.explore.steps=0;r.explore.dice=[];r.encounter=null;game.profile.bestFloor=Math.max(game.profile.bestFloor,r.floor);logRun(r,`来到第 ${r.floor} 层。`);
+}
+function act(state,action){
+ const game=structuredClone(state);
+ try{
+  rule(action&&typeof action.type==='string','无效操作。');
+  if(action.type==='new-run'){beginRun(game,action.seed??Date.now());return {state:game,error:null};}
+  if(action.type==='unlock'){
+   const id=action.id,d=CARDS[id];rule(d?.unlock&&!game.profile.unlocked.includes(id),'这张卡已经解锁。');rule(game.profile.gold>=d.unlock,'营地金币不足。');
+   game.profile.gold-=d.unlock;game.profile.unlocked.push(id);return {state:game,error:null};
+  }
+  const r=game.run;rule(r&&!['won','lost'].includes(r.phase),'请先开始一段新旅程。');
+  switch(action.type){
+   case 'roll':{
+    rule(r.phase==='explore'&&!r.explore.rolled,'这一回合已经掷过骰子。');
+    const minimum=Math.max(r.explore.nextMin,hasRelic(r,'amber')?2:1);
+    r.explore.dice=Array.from({length:r.explore.nextDice},()=>Math.max(minimum,Math.floor(random(r)*6)+1));r.explore.nextDice=1;r.explore.nextMin=1;
+    r.explore.steps=r.explore.dice.reduce((a,b)=>a+b,0);r.explore.rolled=true;logRun(r,`点击掷骰：${r.explore.dice.join(' + ')} = ${r.explore.steps} 步`);feedback(r,'roll');break;
+   }
+   case 'explore-card':useExploreCard(game,action.id,action.amount);break;
+   case 'move':movePlayer(game,Number(action.x),Number(action.y));break;
+   case 'wait':rule(r.phase==='explore'&&r.explore.rolled,'先掷骰，再选择原地待机。');logRun(r,'原地待机，巡逻守卫继续前进。');endExplorationTurn(r);break;
+   case 'interact':rule(r.phase==='explore','当前无法交互。');collectTile(game);break;
+   case 'enter-battle':beginBattle(game);break;
+   case 'retreat':rule(r.phase==='encounter','当前没有交战预览。');r.phase='explore';r.encounter=null;logRun(r,'暂缓交战。下一回合可以调整路线。');break;
+   case 'basic':{
+    rule(r.phase==='battle'&&!r.battle.basicUsed,'每回合只能普攻一次。');const enemy=aliveEnemies(r).find(e=>e.uid===action.target);rule(enemy,'请选择一名敌人。');r.battle.basicUsed=true;
+    const damage=hitEnemy(r,enemy,playerAttack(r));logRun(r,`普攻 → ${ENEMIES[enemy.kind].name}，造成 ${damage} 伤害`);feedback(r,'hit',damage,enemy.uid);battleEndCheck(game);break;
+   }
+   case 'play':playCard(game,action.uid,action.target,action.discardUid);break;
+   case 'end':endBattleTurn(game);break;
+   case 'reward':{
+    rule(r.phase==='reward'&&r.reward,'没有可领取奖励。');if(action.id){rule(r.reward.cards.includes(action.id),'请选择当前候选卡。');addCard(game,action.id);}
+    r.reward=null;r.battle=null;r.encounter=null;r.phase='explore';collectTile(game);break;
+   }
+   case 'ascend':changeFloor(game,1);break;
+   case 'descend':changeFloor(game,-1);break;
+   case 'buy-card':{
+    rule(r.phase==='shop','请先进入商店。');const offer=shopFor(game).cards[action.index];rule(offer&&!offer.bought,'商品已售出。');rule(r.player.gold>=offer.price,'冒险金币不足。');r.player.gold-=offer.price;offer.bought=true;addCard(game,offer.id);logRun(r,`购买了${CARDS[offer.id].name}`);break;
+   }
+   case 'buy-relic':{
+    rule(r.phase==='shop','请先进入商店。');const offer=shopFor(game).relic;rule(offer.id&&!offer.bought&&!hasRelic(r,offer.id),'遗物已售出或已拥有。');rule(r.player.gold>=offer.price,'冒险金币不足。');r.player.gold-=offer.price;offer.bought=true;addRelic(r,offer.id);break;
+   }
+   case 'buy-supply':{
+    rule(r.phase==='shop','请先进入商店。');const kind=action.kind,price={heal:18,mana:15,yellow:15,blue:25}[kind],s=shopFor(game);
+    rule(price&&s.supplies[kind]<3,'这项补给已售罄。');rule(r.player.gold>=price,'冒险金币不足。');r.player.gold-=price;s.supplies[kind]++;
+    if(['yellow','blue'].includes(kind))r.player.keys[kind]++;else r.player.potions[kind]++;break;
+   }
+   case 'remove':{
+    rule(r.phase==='shop','请先进入商店。');const s=shopFor(game),price=35+15*r.stats.removals;rule(!s.removed&&r.deck.length>1,'本店已精简，或牌组已无法再删。');rule(r.player.gold>=price,'冒险金币不足。');rule(r.deck.some(c=>c.uid===action.uid),'这张牌不在牌组中。');
+    r.player.gold-=price;r.deck=r.deck.filter(c=>c.uid!==action.uid);s.removed=true;r.stats.removals++;break;
+   }
+   case 'upgrade':upgradeCard(game,action.uid,r.phase==='rest');break;
+   case 'rest-heal':rule(r.phase==='rest'&&!currentFloor(r).restUsed,'篝火已使用。');rule(r.player.hp<r.player.maxHp,'生命已满，可以选择强化。');healPlayer(r,Math.ceil(r.player.maxHp*.3));currentFloor(r).restUsed=true;r.phase='explore';logRun(r,'篝火恢复了生命。');break;
+   case 'leave':rule(['shop','rest'].includes(r.phase),'当前没有可离开的房间。');r.phase='explore';break;
+   case 'potion':{
+    const kind=action.kind;rule(['heal','mana'].includes(kind)&&r.player.potions[kind]>0,'没有这种药水。');rule(['explore','battle','encounter','shop','rest'].includes(r.phase),'当前无法使用药水。');
+    if(kind==='heal'){rule(r.player.hp<r.player.maxHp,'生命已满。');healPlayer(r,20);}
+    else{rule(r.phase==='battle'&&r.battle.mana<r.battle.maxMana,'蓝药在战斗中、蓝量未满时使用。');r.battle.mana=Math.min(r.battle.maxMana,r.battle.mana+2);}
+    r.player.potions[kind]--;logRun(r,`使用${kind==='heal'?'治疗':'回蓝'}药水`);feedback(r,'buff');break;
+   }
+   default:rule(false,'未知操作。');
+  }
+  return {state:game,error:null};
+ }catch(error){return {state,error:error.message};}
+}
+function cardDescription(card,run){
+ const d=CARDS[card.id];let text=d.text;
+ if(d.type==='weapon'&&run?.battle){
+  const up=card.level?1:0,power=(d.power||0)+({slash:3,heavy:5,pierce:3,sweep:3,bash:4}[d.effect]||0)*up+(d.effect==='bash'?run.battle.block:0);
+  const value=playerAttack(run)+power;
+  text=d.effect==='volley'?`连续攻击 ${2+up} 次，每次 ${value} 物理伤害。`:d.effect==='sweep'?`对所有敌人造成 ${value} 物理伤害。`:`造成 ${value} 物理伤害${d.effect==='pierce'?'，无视防御':''}。`;
+  return text+(d.effect==='pierce'?'（格挡另算）':'（防御、格挡另算）');
+ }
+ return text+(card.level?` 强化：${d.upgrade}`:'');
+}
+function restoreGame(raw){
+ try{
+  const game=typeof raw==='string'?JSON.parse(raw):structuredClone(raw);rule(game?.version===SAVE_VERSION,'版本无效');
+  const integer=(n,min=0,max=100000000)=>Number.isInteger(n)&&n>=min&&n<=max;
+  const profile=game.profile;rule(profile&&integer(profile.gold)&&integer(profile.bestFloor,0,12)&&integer(profile.wins)&&integer(profile.runs),'档案无效');
+  rule(Array.isArray(profile.unlocked)&&new Set(profile.unlocked).size===profile.unlocked.length&&profile.unlocked.every(id=>CARDS[id]),'解锁无效');
+  rule(profile.collection&&Object.entries(profile.collection).every(([id,count])=>CARDS[id]&&integer(count)),'收藏无效');
+  if(!game.run)return game;const r=game.run,p=r.player;
+  rule(integer(r.floor,1,12)&&integer(r.rng,0,4294967295)&&integer(r.seed,0,4294967295)&&integer(r.serial),'旅程无效');
+  rule(['explore','encounter','battle','reward','shop','rest','won','lost'].includes(r.phase),'阶段无效');
+  rule(p&&integer(p.hp,0,500)&&integer(p.maxHp,1,500)&&p.hp<=p.maxHp&&integer(p.atk,1,100)&&integer(p.def,0,100)&&integer(p.gold)&&integer(p.x,0,8)&&integer(p.y,0,8),'角色无效');
+  rule(p.keys&&['yellow','blue'].every(k=>integer(p.keys[k],0,100))&&p.potions&&['heal','mana'].every(k=>integer(p.potions[k],0,100)),'道具无效');
+  rule(r.floors&&r.floors[r.floor]&&Object.entries(r.floors).length<=12,'楼层无效');
+  for(const [number,f] of Object.entries(r.floors)){
+   rule(integer(Number(number),1,12)&&f.number===Number(number)&&integer(f.charges,0,4),'楼层资源无效');
+   rule(Array.isArray(f.tiles)&&f.tiles.length===9&&f.tiles.every(row=>Array.isArray(row)&&row.length===9&&row.every(t=>'#.YBMR><'.includes(t)&&t.length===1)),'地图无效');
+   rule(Array.isArray(f.groups)&&f.groups.length<=12&&new Set(f.groups.map(g=>g.id)).size===f.groups.length&&f.groups.every(g=>typeof g.id==='string'&&integer(g.x,1,7)&&integer(g.y,1,7)&&Array.isArray(g.kinds)&&g.kinds.length>0&&g.kinds.every(id=>ENEMIES[id])),'敌群无效');
+   rule(Array.isArray(f.items)&&f.items.every(i=>integer(i.x,1,7)&&integer(i.y,1,7)&&['key','potion','chest','gem'].includes(i.type)),'物品无效');
+   if(f.shop)rule(f.shop.cards.every(o=>CARDS[o.id]&&integer(o.price))&&(!f.shop.relic.id||RELICS[f.shop.relic.id]),'商店无效');
+  }
+  rule(Array.isArray(r.deck)&&r.deck.length>0&&r.deck.length<=200&&new Set(r.deck.map(c=>c.uid)).size===r.deck.length&&r.deck.every(c=>typeof c.uid==='string'&&CARDS[c.id]&&CARD_TYPES[CARDS[c.id].type].phase==='battle'&&integer(c.level,0,1)),'牌组无效');
+  rule(Array.isArray(r.relics)&&new Set(r.relics).size===r.relics.length&&r.relics.every(id=>RELICS[id]),'遗物无效');
+  const x=r.explore;rule(x&&integer(x.turn,1)&&integer(x.steps,0,32)&&integer(x.nextDice,1,3)&&integer(x.nextMin,1,3)&&Array.isArray(x.dice)&&x.dice.length<=3&&x.dice.every(v=>integer(v,1,6)),'探索无效');
+  rule(r.prep&&integer(r.prep.block,0,6)&&integer(r.prep.atk,0,2)&&Array.isArray(r.log)&&r.log.every(v=>typeof v==='string'),'记录无效');
+  rule(r.stats&&['kills','battles','rounds','moves','removals','banked'].every(k=>integer(r.stats[k])),'统计无效');
+  if(r.phase==='encounter')rule(r.encounter?.groupIds.length&&r.encounter.groupIds.every(id=>currentFloor(r).groups.some(g=>g.id===id&&!g.defeated)),'遭遇无效');
+  if(r.battle){const b=r.battle;rule(integer(b.turn,1)&&integer(b.mana,0,3)&&b.maxMana===3&&integer(b.block)&&integer(b.atkBonus)&&integer(b.defBonus,0,4)&&integer(b.spellShield,0,1),'战斗资源无效');
+   rule(Array.isArray(b.enemies)&&b.enemies.length>0&&b.enemies.every(e=>ENEMIES[e.kind]&&integer(e.hp,0,e.maxHp)&&integer(e.maxHp,1,1000)&&integer(e.atk,1,100)),'战斗敌人无效');
+   const partition=['hand','draw','discard','exhaust'].flatMap(k=>{rule(Array.isArray(b[k]),'牌堆无效');return b[k];});
+   rule(partition.length===r.deck.length&&new Set(partition).size===partition.length&&partition.every(id=>r.deck.some(c=>c.uid===id))&&b.hand.length<=10,'牌堆不一致');
+  }
+  if(r.phase==='battle')rule(r.battle&&aliveEnemies(r).length&&p.hp>0,'战斗缺失');
+  if(r.phase==='reward')rule(r.reward&&r.reward.cards.length===3&&r.reward.cards.every(id=>CARDS[id]),'奖励无效');
+  if(r.phase==='shop')rule(currentFloor(r).shop,'商店缺失');
+  return game;
+ }catch{return null;}
+}
+
+
+const PATHS = {
+  key: '<circle cx="8" cy="8" r="5"/><path d="m12 12 9 9m-5-5 3-3m-1 5 3-3"/>',
+  chest: '<path d="M3 10V7c0-3 18-3 18 0v3M3 10h18v11H3V10Zm0 4h18M10 12h4v5h-4v-5Z"/>',
+  stairs: '<path d="M3 21h6v-5h5v-5h7V3M4 4l6 6m-6 0h6V4"/>',
+  potion: '<path d="M9 2h6v5l5 9c2 5-18 5-16 0l5-9V2Zm0 4h6M6 14h12"/>',
+  sword: '<path d="m4 20 5-5m-3-3 6 6M9 15l9-11 3-1-1 4-9 10M3 17l4 4"/>',
+  axe: '<path d="M5 21 16 5m-6-1c5-2 8-1 11 2l-6 7c-3-1-5-3-5-9ZM3 19l3 3"/>',
+  shield: '<path d="m12 3 8 3v6c0 5-8 9-8 9s-8-4-8-9V6l8-3Z"/><path d="m8 12 3 3 5-6"/>',
+  heart: '<path d="M20.8 5.8c-2.5-2.8-6-1.8-8.8 1.2C9.2 4 5.7 3 3.2 5.8-.7 10.2 6 16 12 21c6-5 12.7-10.8 8.8-15.2Z"/>',
+  leaf: '<path d="M20 3C9 2 2 7 5 15c3 7 17 4 15-12ZM4 21 17 7M8 15l6 1M12 11V7"/>',
+  drop: '<path d="M12 2C9 7 4 11 4 15a8 8 0 0 0 16 0c0-4-5-8-8-13ZM8 15c0 3 1 4 4 4"/>',
+  spark: '<path d="m12 2 3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z"/>',
+  star: '<path d="m12 2 3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6Z"/>',
+  copy: '<rect x="8" y="8" width="13" height="13" rx="3"/><path d="M16 8V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h4"/>',
+  rotate: '<path d="M4 9a8 8 0 1 1 0 7M4 3v6h6"/>',
+  dice: '<rect x="3" y="3" width="18" height="18" rx="4"/><path d="M7 7h.01M17 7h.01M12 12h.01M7 17h.01M17 17h.01" stroke-width="3"/>',
+  arrow: '<path d="m3 21 17-17m-9 0h9v9M3 14v7h7m-4-9 6 6"/>',
+  flame: '<path d="M13 2c1 8-6 7-4 13 1-3 4-3 4-5 9 7 6 12-1 12S0 13 7 7c-1 5 2 5 2 5s0-5 4-10Z"/>',
+  thorn: '<path d="M3 20 21 3M8 15 4 8m9 2-2-7m-1 10 8 2m-4-8h8M4 19l-1-5"/>',
+  castle: '<path d="M4 21V9h4V4h3v5h2V4h3v5h4v12H4Zm6 0v-6h4v6M5 4v3m14-3v3"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
+  coin: '<circle cx="12" cy="12" r="9"/><path d="m12 6 4 6-4 6-4-6 4-6Z"/>',
+  feather: '<path d="M4 21 17 7M6 18C-2 11 16-1 21 3c2 5-7 21-15 15Zm3-4h7m-4-4h7"/>',
+  gem: '<path d="m7 3-5 6 10 13L22 9l-5-6H7ZM2 9h20M7 3l5 19 5-19"/>',
+  crown: '<path d="M3 6 7 10l5-7 5 7 4-4-2 13H5L3 6Zm3 10h12"/>',
+  skull: '<path d="M7 18H5v-4C0 4 8 2 12 2s12 2 7 12v4h-2v4H7v-4Z"/><circle cx="8" cy="11" r="2"/><circle cx="16" cy="11" r="2"/><path d="m11 16 1-2 1 2m-3 3v3m4-3v3"/>',
+  tower: '<path d="M5 22V9l7-7 7 7v13H5ZM3 9h18M9 22v-5h6v5M9 12h6"/>',
+  book: '<path d="M12 6c-4-3-7-3-10-2v16c3-1 6-1 10 2 4-3 7-3 10-2V4c-3-1-6-1-10 2Zm0 0v16"/>',
+  help: '<circle cx="12" cy="12" r="9"/><path d="M9 9a3 3 0 1 1 5 2c-2 1-2 2-2 3m0 3v.01"/>',
+  sound: '<path d="m11 3-6 5H2v8h3l6 5V3Zm4 5c3 2 3 6 0 8m3-11c5 4 5 10 0 14"/>',
+  mute: '<path d="m11 3-6 5H2v8h3l6 5V3Zm5 6 6 6m0-6-6 6"/>',
+  close: '<path d="m5 5 14 14M19 5 5 19"/>',
+  chevron: '<path d="m9 5 7 7-7 7"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 3"/>',
+};
+function icon(name, cls = '') {
+  return `<svg class="icon ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${PATHS[name] || PATHS.spark}</svg>`;
+}
+let artSerial = 0;
+function creature(kind, color = '#b99a67') {
+  const id=`art${++artSerial}`;
+  let body='';
+  if(kind==='hero') body=`<path d="m75 179 13-65 32-18 32 18 14 65-40 17Z" fill="#476858"/><path d="m89 113-22 67 33-6 20-55 21 56 31 5-22-67" fill="#324e47"/><path d="m105 91 5 26 22 0 5-26" fill="#c4a681"/><path d="M91 92c0-44 58-44 58 0l-7 15h-42Z" fill="#24413b"/><path d="M102 85q18-17 36 0l-6 18h-23Z" fill="#ad9272"/><path d="M106 87h27l-5 8h-18Z" fill="#172d2b"/><path d="m85 121-12 34 12 5 12-30M151 122l14 28-11 9-16-30" fill="#b6956a"/><path d="m165 141 16-59 8-11 1 14-15 60Z" fill="#e8d8a9"/><path d="m158 141 24 7m-15-9-6 22" stroke="#9d783e" stroke-width="6"/><path d="M96 159h48v11H96Z" fill="#a78047"/><path d="m100 176-5 26h17l8-23 9 23h18l-7-26" fill="#172e2b"/><path d="m109 118 11 9 12-9-12 26Z" fill="#c8ab6d"/>`;
+  else if(kind==='slime') body=`<path d="M48 171c0-29 14-50 40-61 4-46 57-59 74-11 30 5 45 37 39 72-15 35-132 37-153 0Z" fill="url(#${id}body)"/><path d="M66 157q17-51 43-29m48-16 20 38" stroke="#c1d2a1" stroke-width="8" opacity=".3"/><ellipse cx="100" cy="151" rx="7" ry="11" fill="#153b32"/><ellipse cx="150" cy="149" rx="7" ry="11" fill="#153b32"/><path d="M115 167q11 10 21-1" stroke="#315649" stroke-width="4"/><path d="m111 90 8-20 13 17 13-11 4 28" fill="#aeb87c"/><circle cx="75" cy="177" r="8" fill="#aec68b" opacity=".4"/>`;
+  else if(kind==='wisp') body=`<path d="M65 185q-25-69 17-96-12-43 29-59-11 34 24 40 60 19 38 76l18 27-33 7-22 22-20-17-32 19 6-25Z" fill="url(#${id}body)"/><path d="M98 155q-35-41 20-73-12 36 22 49 23 20-6 40l-6-17-15 19Z" fill="#b8ebe1" opacity=".65"/><path d="m100 125 13 8m30-8-12 8" stroke="#183e3b" stroke-width="5"/><circle cx="120" cy="153" r="7" fill="#183e3b"/>`;
+  else if(kind==='spider') body=`<path d="m87 113-39-26-19 37m64 8-46-2-24 40m72-24-40 22-13 29m110-84 39-26 20 37m-64 8 46-2 24 40m-72-24 40 22 13 29" stroke="${color}" stroke-width="9" fill="none"/><ellipse cx="122" cy="116" rx="38" ry="44" fill="url(#${id}body)"/><ellipse cx="122" cy="155" rx="30" ry="28" fill="#4a4159"/><path d="m101 172-7 16m48-16 8 16" stroke="#c7b5ac" stroke-width="5"/><circle cx="109" cy="152" r="5" fill="#e1b59c"/><circle cx="135" cy="152" r="5" fill="#e1b59c"/><path d="m117 97 5-9 6 9-6 12Z" fill="#dfd1ba" opacity=".7"/>`;
+  else if(kind==='beast') body=`<path d="m58 177 8-54 22-33 6-35 22 16 24-3 24-17 7 44 24 36 5 45-29 16-18-19-14 23-25-14-24 13Z" fill="url(#${id}body)"/><path d="m86 104 27 13-12 11-23-13m57 2 26-14 8 15-24 12" fill="#263735"/><path d="m94 140 50-3-11 32-22-1Z" fill="#243533"/><path d="m99 140 7 17 7-16m15-1 5 15 5-17" fill="#dfcba8"/><path d="m91 80 6-17 11 15m40-1 15-17 2 23" fill="#5c4a42"/>`;
+  else if(kind==='mage'||kind==='oracle') body=`<path d="m63 190 23-81 17-28 34-3 21 31 21 81-57 14Z" fill="url(#${id}body)"/><path d="m105 108 17 59 14-59-5 78h-18Z" fill="#d3bb86"/><path d="M91 95 100 59l24-29 28 33 2 32-28 16Z" fill="#393a4e"/><path d="m108 82 18-9 18 9-9 17h-18Z" fill="#bbb0bb"/><path d="M114 85h21" stroke="#172f32" stroke-width="6"/><path d="M65 157 43 100m1 0-4-37m0 2-13 11 14 13 14-13Z" stroke="#d0b172" stroke-width="5" fill="#7e759c"/><path d="m151 126 18 30 16-2" stroke="#a6a1b9" stroke-width="13"/>${kind==='oracle'?`<circle cx="125" cy="60" r="52" stroke="#c8b375" stroke-width="1.5" fill="none"/><path d="m82 58 13-42 22 18 12-30 15 30 23-13 4 37" stroke="#d5bd82" stroke-width="4" fill="none"/><circle cx="125" cy="3" r="4" fill="#eadbad"/>`:''}`;
+  else if(kind==='rogue') body=`<path d="m69 193 19-72 27-23 24 8 19 31 14 56-49 7Z" fill="url(#${id}body)"/><path d="m98 172-10 31h18l15-29 11 29h17l-3-36" fill="#1e3331"/><path d="m95 107 4-40 24-29 26 33 1 35-27 16Z" fill="#3c4441"/><path d="m106 85 17-6 16 6-8 17h-17Z" fill="#c2a685"/><path d="m108 89 29 0" stroke="#20302e" stroke-width="5"/><path d="m87 128-24 34 10 7 24-25m54-14 22 32-10 6-21-27" fill="#a99274"/><path d="m61 163-13-37 21 31m102 8 17-38-9 44" fill="#c3c8b3"/><path d="M94 164h58" stroke="#bc9c60" stroke-width="7"/>`;
+  else body=`<path d="m68 184 13-69 22-20 38 0 25 22 13 67-28 14H95Z" fill="url(#${id}body)"/><path d="m91 109 32 12 31-13-7 54-23 18-26-17Z" fill="#78867d"/><path d="m104 120 19 9 20-9-7 30-13 10-14-10Z" fill="#c6ad70"/><path d="M96 100V63l26-18 29 18v38l-28 12Z" fill="#9f9b80"/><path d="M99 75h48v12H99Z" fill="#1d3733"/><path d="M123 53v47m-10-29-1 19m23-19v19" stroke="#cdba86" stroke-width="3"/><path d="m70 128-23 4-2 46 29 16 26-25-4-38Z" fill="#7b8d7c" stroke="#cab37a" stroke-width="4"/><path d="m57 148 16-6 11 8-13 25Z" fill="#d2b97c"/><path d="m166 151 17-76 6-13 3 17-15 77Z" fill="#d2d5bc"/><path d="m163 149 25 7" stroke="#b59959" stroke-width="6"/><path d="m98 185-5 21h20l10-21 10 21h21l-9-21" fill="#243b35"/>${kind==='boss'?'<path d="m98 61-7-28 22 13 11-29 13 28 24-12-10 29" fill="#cfac64"/>':''}`;
+  return `<svg class="creature creature-${kind}" viewBox="0 0 240 220" fill="none" aria-hidden="true"><defs><linearGradient id="${id}body" x1="80" y1="60" x2="170" y2="210" gradientUnits="userSpaceOnUse"><stop stop-color="${color}"/><stop offset="1" stop-color="#334b43"/></linearGradient></defs><ellipse cx="123" cy="204" rx="77" ry="10" fill="#061917" opacity=".5"/>${body}</svg>`;
+}
+function towerArt() {
+  const id=`tower${++artSerial}`;
+  let windows='';
+  for(let row=0;row<8;row++)for(let col=0;col<3;col++){ const x=278+col*44,y=155+row*48; windows+=`<path d="M${x} ${y+17}v-12a7 7 0 0 1 14 0v12Z" fill="${(row+col)%3===0?'#d5b779':'#152f2d'}" opacity="${(row+col)%3===0?'.8':'.9'}"/>`; }
+  return `<svg class="tower-art" viewBox="0 0 650 650" fill="none" aria-hidden="true"><defs><linearGradient id="${id}stone" x1="220" x2="420" y1="90" y2="580" gradientUnits="userSpaceOnUse"><stop stop-color="#557267"/><stop offset="1" stop-color="#1b3934"/></linearGradient><radialGradient id="${id}glow"><stop stop-color="#beaa6b" stop-opacity=".35"/><stop offset="1" stop-color="#779b80" stop-opacity="0"/></radialGradient></defs><circle cx="330" cy="285" r="250" fill="url(#${id}glow)"/><circle cx="330" cy="260" r="178" stroke="#9caa7d" stroke-opacity=".13"/><circle cx="330" cy="260" r="208" stroke="#9caa7d" stroke-opacity=".08" stroke-dasharray="3 13"/><path d="m66 565 93-86 54 21 65-104 50 38 67-33 52 86 51-1 89 79Z" fill="#152e2a"/><path d="M242 554V139h168v415Z" fill="url(#${id}stone)"/><path d="M231 150v-26l95-71 97 71v26Z" fill="#23453e"/><path d="m226 126 101-78 103 78-14 11-90-60-86 60Z" fill="#647a66"/><path d="m316 64 10-44 13 44" fill="#b09c63"/><path d="M260 546V186h12v360m116 0V186h12v360" stroke="#a5ae85" stroke-opacity=".2" stroke-width="5"/>${windows}<path d="M211 552V319h-48v233m275 0V272h48v280" fill="#355349"/><path d="m154 320 33-53 35 53m204-47 36-60 35 60" fill="#71816a"/><path d="M180 373v-24a7 7 0 0 1 14 0v24m261-46v-24a7 7 0 0 1 14 0v24" fill="#e0bf79" opacity=".6"/><path d="M298 555v-58a28 28 0 0 1 56 0v58Z" fill="#122d29" stroke="#7d8c6b" stroke-width="3"/><path d="m309 552 17-54 17 54" fill="#c6ae73" opacity=".5"/><path d="M230 556h193l18 17H212l18-17Zm-27 17h247l20 18H184l19-18Zm-25 18h299l22 20H156l22-20Z" fill="#4b6655"/><path d="M222 183h197m-180 98h174m-175 96h174m-175 62h174" stroke="#b3ba92" stroke-opacity=".1" stroke-width="5"/><path d="m243 220 33 15-14 58 17 33-18 68m144-52-35 35 17 38-20 37" stroke="#789b6f" stroke-width="8" opacity=".45"/><path d="M73 585q66-78 142-21m217-6q86-45 146 27M20 626q182-85 307-5 169-89 309 0" stroke="#203f34" stroke-width="36" stroke-linecap="round"/><path d="m92 580-5-42m0 21-20-16m20 6 21-21m441 52 8-53m-6 29 23-21" stroke="#49684a" stroke-width="6"/><circle cx="103" cy="225" r="3" fill="#bba875" opacity=".5"/><circle cx="518" cy="175" r="2" fill="#bba875" opacity=".5"/><circle cx="483" cy="376" r="3" fill="#bba875" opacity=".6"/></svg>`;
+}
+
+
+
+const app=document.querySelector('#app'),modal=document.querySelector('#modal'),toastElement=document.querySelector('#toast');
+const SAVE_KEY='dicebound.game.v2',SOUND_KEY='dicebound.sound.v2';
+const escapeHtml=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let game=createGame(),home=true,homeTab='journey',sound=false,selectedCell=null,selectedCard=null,selectedEnemy=null,amount=1,showDice=true,rolling=false,movement=null;
+let returnFocus,toastTimer,audioContext,storageWarning=false,catalogType='all',catalogCost='all';
+try{const raw=localStorage.getItem(SAVE_KEY);if(raw){const restored=restoreGame(raw);if(restored)game=restored;else storageWarning=true;}sound=localStorage.getItem(SOUND_KEY)==='true';}catch{storageWarning=true;}
+function viewedRun(){return movement?.run||game.run;}
+function isBusy(){return rolling||!!movement;}
+function toast(message){clearTimeout(toastTimer);toastElement.textContent=message;toastElement.classList.add('visible');toastTimer=setTimeout(()=>toastElement.classList.remove('visible'),3400);}
+function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(game));}catch{if(!storageWarning){storageWarning=true;toast('当前浏览器无法保存，请保持页面打开。');}}}
+function soundFx(type){
+ if(!sound)return;try{const Audio=window.AudioContext||window.webkitAudioContext;if(!Audio)return;audioContext||=new Audio();audioContext.resume();
+  const oscillator=audioContext.createOscillator(),gain=audioContext.createGain(),now=audioContext.currentTime,[start,end]={roll:[230,600],hit:[180,65],buff:[390,650],hurt:[120,60],choose:[420,530]}[type]||[420,530];
+  oscillator.type=type==='hit'?'triangle':'sine';oscillator.frequency.setValueAtTime(start,now);oscillator.frequency.exponentialRampToValueAtTime(end,now+.13);gain.gain.setValueAtTime(.001,now);gain.gain.exponentialRampToValueAtTime(.05,now+.01);gain.gain.exponentialRampToValueAtTime(.001,now+.19);oscillator.connect(gain);gain.connect(audioContext.destination);oscillator.start();oscillator.stop(now+.2);
+ }catch{}
+}
+function button(label,action,attributes='',style=''){return `<button class="btn ${style}" data-action="${action}" ${attributes}>${label}</button>`;}
+function header(){return `<header class="topbar"><button class="brand" data-action="home" aria-label="返回骰契之塔首页"><span class="brand-mark">${icon('dice')}</span><span><strong>骰契之塔</strong><small>DICEBOUND TOWER</small></span></button><nav aria-label="游戏工具">${!home?`<button class="text-button" data-action="camp" aria-label="前往旅人营地" title="营地">${icon('castle')}<span class="desktop-label">营地</span></button>`:''}<button class="text-button" data-action="catalog" aria-label="查看卡牌图鉴" title="图鉴">${icon('book')}<span class="desktop-label">图鉴</span></button><button class="icon-button" data-action="sound" aria-label="${sound?'关闭声音':'开启声音'}" aria-pressed="${sound}">${icon(sound?'sound':'mute')}</button><button class="icon-button" data-action="help" aria-label="查看玩法说明">${icon('help')}</button></nav></header>`;}
+function hud(r){const p=r.player;return `<section class="run-hud" aria-label="旅程状态"><div class="floor-name">第 ${String(r.floor).padStart(2,'0')} 层 <small>/ 十二层高塔</small></div><div class="hud-values"><span class="health" title="生命">${icon('heart')} ${p.hp}<small>/ ${p.maxHp}</small></span><span class="gold" title="本局冒险金币">${icon('coin')} ${p.gold}</span><span class="key yellow" title="黄钥匙">${icon('key')} ${p.keys.yellow}</span><span class="key blue" title="蓝钥匙">${icon('key')} ${p.keys.blue}</span><button class="hud-button" data-action="deck" aria-label="查看 ${r.deck.length} 张牌组">${icon('book')} ${r.deck.length}</button></div></section><div class="under-hud"><div class="relic-strip">${r.relics.length?r.relics.map(id=>`<button class="relic" data-action="relics" title="${escapeHtml(RELICS[id].name+'：'+RELICS[id].text)}" aria-label="${RELICS[id].name}">${icon(RELICS[id].icon)}</button>`).join(''):'<span class="muted small">稳阵 · 每场开战获得 4 格挡</span>'}</div><div class="potions"><button data-action="potion" data-kind="heal" title="恢复20生命" aria-label="治疗药水，剩余 ${p.potions.heal} 瓶" ${p.potions.heal<=0?'disabled':''}>${icon('potion')} ${p.potions.heal}</button><button data-action="potion" data-kind="mana" title="战斗中恢复2蓝" aria-label="回蓝药水，剩余 ${p.potions.mana} 瓶" ${p.potions.mana<=0||r.phase!=='battle'?'disabled':''}>${icon('drop')} ${p.potions.mana}</button></div></div>`;}
+function routeProgress(r){return `<div class="route" aria-label="楼层进度">${Array.from({length:12},(_,i)=>`<span class="${i+1===r.floor?'current':i+1<r.floor?'past':''}" title="第 ${i+1} 层${[6,12].includes(i+1)?'首领':''}" ${i+1===r.floor?'aria-current="step"':''}>${[6,12].includes(i+1)?icon('crown'):i+1}</span>`).join('')}</div>`;}
+function cardView(card,mode='display',r=viewedRun()){
+ const d=CARDS[card.id],type=CARD_TYPES[d.type],isExplore=type.phase==='explore';
+ const interactive=['hand','reward','upgrade','remove','recall'].includes(mode);
+ let attrs='',check={ok:true};
+ if(mode==='hand'){const target=selectedEnemy||aliveEnemies(r)[0]?.uid;check=canPlay(game,card.uid,target);attrs=`data-action="select-card" data-uid="${card.uid}" aria-disabled="${!check.ok}" title="${escapeHtml(check.reason||'选择这张牌')}"`;}
+ if(mode==='reward')attrs=`data-action="reward" data-id="${card.id}"`;
+ if(['upgrade','remove','recall'].includes(mode))attrs=`data-action="${mode}-confirm" data-uid="${card.uid}"`;
+ return `<${interactive?'button':'article'} class="game-card type-${d.type} ${mode==='hand'&&!check.ok?'unavailable':''} ${selectedCard===card.uid&&mode==='hand'?'selected':''}" ${attrs}><div class="card-top"><span class="card-cost ${isExplore?'explore-cost':''}" title="${isExplore?'探索准备额度':'蓝耗'}">${isExplore?icon('dice'):d.cost}</span><h3>${d.name}${card.level?'<sup>＋</sup>':''}</h3></div><div class="card-art"><div class="card-orbit"></div>${icon(d.icon)}</div><div class="card-type">${type.name}卡 <span>${isExplore?'探索':'战斗'}</span></div><p class="card-description">${escapeHtml(cardDescription(card,r))}</p>${mode==='upgrade'?`<p class="upgrade-text">强化：${d.upgrade}</p>`:''}<div class="card-bottom"><span>${d.exhaust?'消耗 · 本场仅用一次':isExplore?'有限准备 · 改变路线':'骰契 · '+type.name}</span>${icon(card.level?'star':type.icon)}</div></${interactive?'button':'article'}>`;
+}
+function homeScreen(){
+ if(homeTab==='camp')return campScreen();
+ const r=game.run,active=r&&!['won','lost'].includes(r.phase);
+ return `<main class="home screen-enter"><div class="home-copy"><p class="eyebrow">ONE DIE. A THOUSAND POSSIBILITIES.</p><h1>骰契之塔</h1><p class="home-sub">每一步，都在改写命运。</p><p class="home-description">掷出中央的命运骰，走进藏着宝物的古塔。<br>用钥匙选择道路，用卡牌突破敌阵。<br>十二层之上，最后的契约等你揭开。</p><div class="home-actions">${button(icon('dice')+(active?'继续旅程':'签订契约 · 开始'),active?'continue':'start','','primary')}${button(active?'开始新旅程':'如何游玩',active?'new':'help','','ghost')}</div>${active?`<p class="saved-note">已保存：第 ${r.floor} 层 · ${r.player.hp}/${r.player.maxHp} 生命</p>`:''}<div class="home-meta"><span>${icon('tower')} 十二层探索</span><span>${icon('book')} 36 种卡牌</span><span>${icon('sword')} 多敌人对决</span></div><button class="camp-link" data-action="camp">${icon('castle')} 营地解锁 <span>${icon('coin')} ${game.profile.gold}</span>${icon('chevron')}</button></div><div class="home-visual">${towerArt()}<span class="tower-caption">THE TOWER REMEMBERS</span></div></main><footer class="home-footer"><span>方格探索 · 卡组构筑 · 魔塔资源</span><span>${game.profile.bestFloor?`最高 ${game.profile.bestFloor} 层 · 通关 ${game.profile.wins} 次`:'中文单人冒险 · 手机与电脑即开即玩'}</span></footer>`;
+}
+function campScreen(){
+ const locked=Object.entries(CARDS).filter(([,d])=>d.unlock);
+ return `<main class="camp-screen screen-enter"><div class="section-title"><div><p class="eyebrow">THE CAMP BETWEEN JOURNEYS</p><h1>旅人的营地</h1><p>新的可能，会陪你走进下一段旅程。</p></div><div class="bank-balance">${icon('coin')} ${game.profile.gold}<small>已结算营地金币</small></div></div><div class="camp-note panel">${icon('spark')} 首次完成每层后，${'8＋楼层数'} 金币存入营地。失败保留营地金币、解锁和收藏；冒险钱包与钥匙重新开始。解锁后的卡会出现在商店和战后奖励中。</div><div class="catalog-grid">${locked.map(([id,d])=>`<section class="camp-offer">${cardView({id,level:0})}${button(game.profile.unlocked.includes(id)?'已解锁':`${icon('coin')} ${d.unlock} · 解锁`,'unlock',`data-id="${id}" ${game.profile.unlocked.includes(id)||game.profile.gold<d.unlock?'disabled':''}`,game.profile.unlocked.includes(id)?'ghost':'primary')}</section>`).join('')}</div><div class="center-actions">${button(game.run&&!['won','lost'].includes(game.run.phase)?'返回当前旅程':'返回首页',game.run&&!['won','lost'].includes(game.run.phase)?'continue':'home','','ghost')}</div></main>`;
+}
+function diceMarkup(value,large=false){const points={1:[5],2:[1,9],3:[1,5,9],4:[1,3,7,9],5:[1,3,5,7,9],6:[1,3,4,6,7,9]};return `<span class="die ${large?'large':''}">${points[value].map(n=>`<i style="grid-column:${(n-1)%3+1};grid-row:${Math.floor((n-1)/3)+1}"></i>`).join('')}</span>`;}
+function tileContent(r,x,y){
+ const f=currentFloor(r),p=r.player,group=f.groups.find(g=>!g.defeated&&g.x===x&&g.y===y),item=f.items.find(i=>!i.taken&&i.x===x&&i.y===y),tile=f.tiles[y][x];
+ if(p.x===x&&p.y===y)return {html:creature('hero'),label:'契约旅人',cls:'hero'};
+ if(group){const d=ENEMIES[group.kinds[0]];return {html:creature(d.art,d.color)+`<span class="enemy-count">${group.kinds.length}</span>`,label:`${group.name}，${group.kinds.length} 名敌人${group.patrol?'，巡逻中':''}`,cls:'monster '+(group.boss?'boss':'')};}
+ if(tile==='#')return {html:'',label:'石墙',cls:'wall'};
+ if(tile==='Y'||tile==='B')return {html:icon('key'),label:(tile==='Y'?'黄':'蓝')+'钥匙门',cls:'door '+(tile==='Y'?'yellow':'blue')};
+ if(tile==='M')return {html:icon('coin'),label:'流浪商店',cls:'merchant'};
+ if(tile==='R')return {html:icon('flame'),label:f.restUsed?'已使用的篝火':'旅人篝火',cls:'rest'};
+ if(tile==='>'||tile==='<')return {html:icon('stairs'),label:tile==='>'?'上行楼梯':'下行楼梯',cls:'stairs'};
+ if(item)return {html:icon({key:'key',chest:'chest',potion:'potion',gem:'gem'}[item.type]),label:{key:(item.color==='blue'?'蓝':'黄')+'钥匙',chest:item.locked?'蓝锁宝箱':'宝箱',potion:'治疗药水',gem:item.stat==='atk'?'攻击结晶':'生命结晶'}[item.type],cls:'loot '+(item.color||'')};
+ return {html:'<span class="tile-dot"></span>',label:'地板',cls:'floor'};
+}
+function explorationCards(r){
+ return `<div class="prep-title"><div><h3>探索手册</h3><p>点数改变路线，契约改变下一次掷骰。</p></div><span class="prep-charge">${currentFloor(r).charges}<small> 本层准备</small></span></div><label class="amount-control">加减步数 <select id="step-amount" aria-label="选择加减步数">${[1,2,3].map(n=>`<option value="${n}" ${amount===n?'selected':''}>${n} 步</option>`).join('')}</select></label><div class="explore-cards">${Object.entries(CARDS).filter(([id,d])=>CARD_TYPES[d.type].phase==='explore'&&game.profile.unlocked.includes(id)).map(([id,d])=>{const check=canExploreCard(game,id,amount);return `<button class="explore-card ${check.ok?'available':''}" data-action="explore-card" data-id="${id}" aria-disabled="${!check.ok}" title="${escapeHtml(check.reason||d.text)}"><span class="mini-symbol">${icon(d.icon)}</span><span><b>${d.name}</b><small>${escapeHtml(d.text)}</small></span></button>`;}).join('')}</div>`;
+}
+function mapScreen(r){
+ const f=currentFloor(r),paths=r.explore.rolled?pathsFrom(r):new Map(),path=selectedCell&&r.explore.rolled?movePath(r,selectedCell.x,selectedCell.y):null;
+ const pathKeys=new Set(path?.slice(1).map(p=>`${p.x},${p.y}`)||[]),selected=path?.at(-1),sealed=!f.groups.find(g=>g.seal).defeated;
+ const activeDice=r.explore.rolled?r.explore.dice:Array.from({length:r.explore.nextDice},()=>1),overlay=(!r.explore.rolled||showDice||rolling)&&!movement;
+ return `<main class="explore-layout"><section class="map-main"><div class="map-heading"><div><p class="eyebrow">THE ${r.floor===6||r.floor===12?'SEALED':'FORGOTTEN'} FLOOR</p><h2>${r.floor===12?'最后的契约':r.floor===6?'黄铜之誓':'石阶之间，另有道路'}</h2></div><span class="chip">探索 ${r.explore.turn}</span></div><div class="map-frame"><div class="map-scroll" aria-label="楼层地图，可横向滚动"><div class="map-grid" role="grid" aria-label="九乘九楼层棋盘">${f.tiles.map((row,y)=>row.map((tile,x)=>{const c=tileContent(r,x,y),key=`${x},${y}`,reachable=paths.has(key)&&pathKeys.size>=0;return `<button role="gridcell" class="map-tile ${c.cls} ${reachable?'reachable':''} ${pathKeys.has(key)?'path':''} ${selected?.x===x&&selected?.y===y?'destination':''}" data-action="tile" data-x="${x}" data-y="${y}" aria-label="${String.fromCharCode(65+x)}${y+1} ${c.label}${reachable?'，可到达':''}" tabindex="${r.player.x===x&&r.player.y===y?0:-1}" ${tile==='#'||!r.explore.rolled||isBusy()?'disabled':''}>${c.html}</button>`;}).join('')).join('')}</div></div>${overlay?`<div class="dice-overlay ${rolling?'rolling':''}"><p class="eyebrow">${rolling?'FATE IS IN MOTION':'THE DICE OF DESTINY'}</p><button class="central-dice" data-action="${r.explore.rolled?'hide-dice':'roll'}" aria-label="${r.explore.rolled?'收起骰子，选择移动位置':'点击中央骰子开始掷骰'}" ${rolling?'disabled':''}><span class="dice-group">${activeDice.map(v=>diceMarkup(v,true)).join('')}</span><strong>${rolling?'命运正在落定…':r.explore.rolled?`${r.explore.steps} 步 · 点击收起`:'点击掷出命运骰'}</strong></button><p>${r.explore.nextDice>1&&!r.explore.rolled?`下一次契约：${r.explore.nextDice} 颗骰子，点数相加`:'点数决定这次可以走多远'}</p></div>`:''}</div><div class="map-status"><button class="dice-summary" data-action="${r.explore.rolled?'show-dice':'roll'}" ${isBusy()?'disabled':''}>${icon('dice')} ${r.explore.rolled?`${r.explore.dice.join('＋')} · 可走 ${r.explore.steps} 步`:`${r.explore.nextDice} 颗骰子 · 点击掷骰`}</button><span>${icon(sealed?'key':'check')} ${sealed?'击败楼梯守门人解除封印':'楼梯封印已解除'}</span></div><div class="move-panel"><div><strong>${movement?'旅人正在逐格前进…':selected?`目的地 ${String.fromCharCode(65+selected.x)}${selected.y+1} · ${path.length-1} 步`:r.explore.rolled?'选择蓝色格子，预览移动路径':'先点击画面中央的骰子'}</strong><small>${selected&&r.explore.rolled?'遇到相邻敌群会停步；蓝锁宝箱需要钥匙。':'蓝色可达 · 金色路径 · 红色敌群 · 钥匙开启同色门'}</small></div>${button('确认移动 '+icon('chevron'),'move',`${!path||path.length<2||isBusy()?'disabled':''}`,'primary')}</div><div class="map-actions">${button(icon('book')+' 探索卡 · '+f.charges,'explore-menu','','ghost mobile-only')}${r.explore.rolled?button('原地待机','wait',isBusy()?'disabled':'','ghost'):''}${f.tiles[r.player.y][r.player.x]==='>'?button(sealed?'先击败守门人':'登上下一层','ascend',sealed?'disabled':'','primary'):''}${f.tiles[r.player.y][r.player.x]==='<'?button('返回上一层','descend','','ghost'):''}${['M','R'].includes(f.tiles[r.player.y][r.player.x])?button(f.tiles[r.player.y][r.player.x]==='M'?'查看商店':'查看篝火','interact','','ghost'):''}${f.items.some(i=>!i.taken&&i.x===r.player.x&&i.y===r.player.y)?button('拾取脚下物品','interact','','ghost'):''}</div><p class="map-footnote">${icon('eye')} 巡逻守卫会在探索回合结束后移动。手机可横向拖动地图查看完整楼层。</p></section><aside class="explore-sidebar"><section class="panel prep-panel">${explorationCards(r)}<p class="next-contract">${icon('dice')} 下次探索：${r.explore.nextDice} 颗${r.explore.nextMin>1?'，每颗最低 3':''} · 战备格挡 ${r.prep.block}</p></section><section class="panel journey-panel">${routeProgress(r)}<p class="eyebrow">THE JOURNEY SO FAR</p><ol class="log-list">${r.log.slice(-4).map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ol></section></aside></main>`;
+}
+function encounterScreen(r){
+ const groups=currentFloor(r).groups.filter(g=>r.encounter.groupIds.includes(g.id));
+ return `<main class="center-stage encounter-screen screen-enter"><p class="eyebrow">THE PATH IS GUARDED</p><h1>前方，契约的守卫</h1><p>你已进入敌群的一格邻域。准备好，再向前。</p><div class="encounter-enemies">${groups.flatMap(g=>g.kinds).map(kind=>{const e=ENEMIES[kind];return `<article>${creature(e.art,e.color)}<h3>${e.name}</h3></article>`;}).join('')}</div><div class="encounter-summary"><span class="chip">${groups.reduce((sum,g)=>sum+g.kinds.length,0)} 名敌人</span>${groups.some(g=>g.boss)?'<span class="chip gold">首领遭遇</span>':''}<span class="chip">攻击 ${r.player.atk} · 防御 ${r.player.def}</span></div><div class="center-actions">${button(icon('sword')+' 进入战斗','enter-battle','','primary')}${button('暂缓交战，调整路线','retreat','','ghost')}</div><p class="footnote">战斗不会消耗“下一探索回合”的骰数契约。</p></main>`;
+}
+function healthBar(value,max,label){return `<div class="health-track" role="progressbar" aria-label="${label}" aria-valuemin="0" aria-valuemax="${max}" aria-valuenow="${value}"><span style="width:${Math.max(0,value/max*100)}%"></span></div><span class="health-number">${value} / ${max}</span>`;}
+function statusChips(entity){return `<div class="status-chips">${[['block','shield','格挡'],['poison','leaf','中毒'],['weak','eye','虚弱'],['spellShield','gem','法术护盾'],['thorns','thorn','荆棘'],['atkDown','sword','攻击降低'],['defDown','castle','防御降低']].filter(([key])=>entity[key]>0).map(([key,name,label])=>`<span class="status-chip" title="${label}">${icon(name)} ${entity[key]}<span class="visually-hidden">${label}</span></span>`).join('')}</div>`;}
+function battleScreen(r){
+ const b=r.battle,enemies=aliveEnemies(r);if(!enemies.some(e=>e.uid===selectedEnemy))selectedEnemy=enemies[0]?.uid;
+ const picked=selectedCard&&r.deck.find(c=>c.uid===selectedCard),target=enemies.find(e=>e.uid===selectedEnemy);
+ return `<main class="battle-screen"><div class="battle-heading"><div><p class="eyebrow">THE CONTRACT OF STEEL & SPELL</p><h2>${b.enemies.some(e=>['gatekeeper','oracle'].includes(e.kind))?'首领之战':'古塔遭遇'}</h2></div><div class="battle-round"><span class="chip">回合 ${b.turn}</span><span>${enemies.length} / ${b.enemies.length} 名敌人</span></div></div><section class="battle-arena" aria-label="战斗场景"><div class="hero-combatant"><div class="hero-portrait">${creature('hero')}</div><h3>契约旅人</h3><p class="combat-stats">${icon('sword')} ${playerAttack(r)} <span>${icon('castle')} ${playerDefense(r)}</span></p>${healthBar(r.player.hp,r.player.maxHp,'角色生命')}${statusChips(b)}</div><div class="arena-divider"><span>VS</span></div><div class="enemy-lineup ${b.enemies.length>3?'many-enemies':''}">${b.enemies.map(e=>{const d=ENEMIES[e.kind],intent=enemyIntent(r,e);return `<button class="enemy-combatant ${e.hp<=0?'defeated':''} ${selectedEnemy===e.uid?'targeted':''} ${picked&&e.hp>0?'valid-target':''}" data-action="enemy" data-id="${e.uid}" aria-label="${d.name}，生命 ${e.hp}/${e.maxHp}，${e.hp>0?'下回合'+intent.label:'已击败'}" aria-pressed="${selectedEnemy===e.uid}" ${e.hp<=0?'disabled':''}><span class="intent ${intent.skill?'spell-intent':''}">${icon(intent.skill?'spark':intent.type==='guard'?'shield':'sword')} ${e.hp<=0?'已击败':intent.label}</span>${creature(d.art,d.color)}<h3>${d.name}</h3><p class="enemy-defense">${icon('castle')} ${Math.max(0,e.def-e.defDown)} 防御</p>${healthBar(e.hp,e.maxHp,d.name+'生命')}${statusChips(e)}</button>`;}).join('')}</div></section><div class="battle-toolbar"><div class="mana-display" aria-label="蓝量 ${b.mana}/${b.maxMana}"><span>${icon('drop')}</span><strong>${b.mana}</strong><small>/ ${b.maxMana}<br>每轮恢复 3</small><div class="mana-dots">${Array.from({length:3},(_,i)=>`<i class="${i<b.mana?'full':''}"></i>`).join('')}</div></div><div class="target-guide">${picked?`<strong>已选择「${CARDS[picked.id].name}」</strong><span>点击一名敌人释放 · 确认前不扣蓝</span>`:`<strong>${target?'当前目标：'+ENEMIES[target.kind].name:'选择目标'}</strong><span>点击武器或技能牌，再点击敌人</span>`}${picked?'<button class="text-button" data-action="cancel-card">取消选牌</button>':''}</div><div class="turn-controls">${button(b.basicUsed?'本回合已普攻':`${icon('sword')} 普攻 · ${playerAttack(r)}`,'basic',`${b.basicUsed?'disabled':''} title="每回合一次，不耗蓝"`,'ghost')}${button('结束回合 '+icon('chevron'),'end','','primary')}</div></div><section class="hand-section" aria-label="战斗手牌"><div class="hand-heading"><strong>本回合手牌 <small>${b.hand.length} 张</small></strong><div><button class="text-button" data-action="pile" data-pile="draw">抽牌 ${b.draw.length}</button><button class="text-button" data-action="pile" data-pile="discard">弃牌 ${b.discard.length}</button><button class="text-button" data-action="pile" data-pile="exhaust">消耗 ${b.exhaust.length}</button></div></div><div class="hand">${b.hand.length?b.hand.map(id=>cardView(r.deck.find(c=>c.uid===id),'hand',r)).join(''):'<div class="empty-hand">手牌已用完。你仍可以普攻或使用药水，然后结束回合。</div>'}</div></section><details class="battle-log"><summary>战斗记录 <span>查看最近行动</span></summary><ol class="log-list">${r.log.slice(-8).map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ol></details></main>`;
+}
+function rewardScreen(r){const reward=r.reward;return `<main class="center-stage screen-enter"><div class="large-emblem">${icon('spark')}</div><p class="eyebrow">A VICTORY. A NEW POSSIBILITY.</p><h1>胜利之后，新的可能</h1><p>选择一张卡牌加入本局牌组，也可以保持精简。</p><div class="reward-summary"><span class="chip gold">${icon('coin')} +${reward.gold} 冒险金币</span>${reward.healed?`<span class="chip green">${icon('heart')} +${reward.healed} 生命</span>`:''}${reward.relic?`<button class="chip gold" data-action="relics">${icon(RELICS[reward.relic].icon)} ${RELICS[reward.relic].name}</button>`:''}</div><div class="reward-cards">${reward.cards.map(id=>cardView({id,level:0},'reward',r)).join('')}</div>${button('跳过，返回地图 '+icon('chevron'),'reward','','ghost')}<p class="footnote">选择会保存在当前浏览器。返回地图后，本次移动结束。</p></main>`;}
+function shopScreen(r){
+ const s=currentFloor(r).shop,p=r.player,removeCost=35+r.stats.removals*15;
+ return `<main class="shop-screen screen-enter"><div class="section-title"><div><p class="eyebrow">THE WANDERING MERCHANT</p><h1>流浪商人的行囊</h1><p>“正确的一张牌，比满袋金币更珍贵。”</p></div>${button('返回地图 '+icon('chevron'),'leave','','primary')}</div><div class="shop-cards">${s.cards.map((offer,index)=>`<section>${cardView({id:offer.id,level:0},'display',r)}${button(offer.bought?'已售出':`${icon('coin')} ${offer.price} · ${p.gold<offer.price?'金币不足':'购买'}`,'buy-card',`data-index="${index}" ${offer.bought||p.gold<offer.price?'disabled':''}`,offer.bought?'ghost':'')}</section>`).join('')}</div><div class="shop-services">${s.relic.id?`<section class="panel"><div class="service-heading">${icon(RELICS[s.relic.id].icon)}<h3>${RELICS[s.relic.id].name}</h3></div><p>${RELICS[s.relic.id].text}</p>${button(s.relic.bought?'已售出':`${icon('coin')} 75 · ${p.gold<75?'金币不足':'购买遗物'}`,'buy-relic',s.relic.bought||p.gold<75||r.relics.includes(s.relic.id)?'disabled':'','ghost')}</section>`:''}<section class="panel"><h3>磨砺与取舍</h3><p>强化一张卡，或为关键组合精简牌组；本店各限一次。</p>${button(s.upgraded?'本店已强化':`${icon('coin')} 40 · 强化一张卡`,'upgrade-picker',`${s.upgraded||p.gold<40||r.deck.every(c=>c.level)?'disabled':''}`,'ghost')}${button(s.removed?'本店已精简':`${icon('coin')} ${removeCost} · 精简牌组`,'remove-picker',`${s.removed||p.gold<removeCost||r.deck.length<=1?'disabled':''}`,'ghost')}</section><section class="panel"><h3>路上的补给</h3><div class="supply-list">${[['heal','治疗药水',18,'potion'],['mana','回蓝药水',15,'drop'],['yellow','黄钥匙',15,'key'],['blue','蓝钥匙',25,'key']].map(([id,name,price,glyph])=>button(`${icon(glyph)} ${name}<small>${s.supplies[id]>=3?'售罄':price+' 金'}</small>`,'buy-supply',`data-kind="${id}" ${p.gold<price||s.supplies[id]>=3?'disabled':''}`,'ghost')).join('')}</div></section></div><p class="footnote">使用本局冒险金币。营地解锁使用已结算的营地金币。</p></main>`;
+}
+function restScreen(r){return `<main class="center-stage screen-enter"><div class="large-emblem">${icon('flame')}</div><p class="eyebrow">A MOMENT BY THE FIRE</p><h1>火光尚温，旅途仍长</h1><p>这一层的篝火，只能选择一项整备。</p><div class="rest-choices"><section class="panel">${icon('heart')}<h3>歇一歇，养精蓄锐</h3><p>恢复最大生命的 30%。当前可恢复 ${Math.min(Math.ceil(r.player.maxHp*.3),r.player.maxHp-r.player.hp)} 生命。</p>${button(r.player.hp===r.player.maxHp?'生命已满':'恢复生命','rest-heal',r.player.hp===r.player.maxHp?'disabled':'','primary')}</section><section class="panel">${icon('spark')}<h3>磨砺一张卡牌</h3><p>选择一张未强化卡，本局永久强化。每张卡最多强化一次。</p>${button('选择要强化的牌','upgrade-picker',r.deck.every(c=>c.level)?'disabled':'','ghost')}</section></div>${button('暂不整备，返回地图','leave','','ghost')}</main>`;}
+function resultScreen(r){const won=r.phase==='won';return `<main class="center-stage result-screen screen-enter"><div class="large-emblem">${icon(won?'crown':'feather')}</div><p class="eyebrow">${won?'THE CONTRACT IS REWRITTEN':'EVERY ENDING IS A BEGINNING'}</p><h1>${won?'塔顶之上，命运由你书写':'这一次，先到这里'}</h1><p class="event-story">${won?'最后一道契印悄然碎裂。你收起骰子，走进清晨的光。':'营地的灯还亮着。带上这一次学会的东西，再次走进高塔。'}</p><div class="result-stats">${[[r.floor+'/12','到达楼层'],[r.stats.kills,'击败敌人'],[r.stats.rounds,'战斗回合'],[r.stats.banked,'已存营地金币']].map(([value,label])=>`<div><strong>${value}</strong><small>${label}</small></div>`).join('')}</div><div class="center-actions">${button('再次签订契约','new','','primary')}${button('前往营地解锁','camp','','ghost')}${button('回顾本局牌组','deck','','ghost')}</div><p class="footnote">${won?'已记录通关。':'本局金币、钥匙和药水已清空。'}解锁、收藏和已结算营地金币保留。</p></main>`;}
+function render(){
+ const active=document.activeElement,focus=active?.closest?.('[data-action]'),focusData=focus&&app.contains(focus)?{...focus.dataset}:null;
+ const previousScroll=[...app.querySelectorAll('.map-scroll,.hand')].map(e=>({className:e.className,left:e.scrollLeft}));
+ const r=viewedRun();let content=home||!r?homeScreen():({explore:mapScreen,encounter:encounterScreen,battle:battleScreen,reward:rewardScreen,shop:shopScreen,rest:restScreen,won:resultScreen,lost:resultScreen})[r.phase](r);
+ app.innerHTML=`<div class="app-shell ${!home&&r?.phase==='battle'?'wide-shell':''}">${header()}${!home&&r?hud(r):''}${content}</div>`;
+ for(const pos of previousScroll){const element=app.getElementsByClassName(pos.className)[0];if(element)element.scrollLeft=pos.left;}
+ if(focusData){const target=[...app.querySelectorAll('[data-action]:not(:disabled)')].find(e=>Object.entries(focusData).every(([key,value])=>e.dataset[key]===value));
+  (target||app.querySelector('.central-dice:not(:disabled), [data-action="tile"][tabindex="0"]:not(:disabled), main button:not(:disabled):not([aria-disabled="true"])'))?.focus({preventScroll:true});}
+}
+function closeModal(){if(!modal.open)return;modal.close();if(returnFocus?.isConnected)returnFocus.focus({preventScroll:true});else app.querySelector('[data-action="help"]')?.focus({preventScroll:true});}
+function showModal(title,body){if(!modal.open)returnFocus=document.activeElement;modal.innerHTML=`<div class="modal-header"><h2 id="modal-title">${title}</h2><button class="icon-button" data-action="close" aria-label="关闭弹窗">${icon('close')}</button></div><div class="modal-body">${body}</div>`;if(!modal.open)modal.showModal();modal.querySelector('button')?.focus();}
+function showHelp(){showModal('一份登塔指南',`<ol class="help-steps"><li><strong>地图探索：点中央骰子，再选落点</strong>默认一颗骰子，点数决定最多能走几格。先点蓝格预览路径，再确认移动。不能穿墙或敌人。</li><li><strong>点数卡与骰数卡</strong>点数卡调整本次总步数。骰数卡影响下一次探索投掷，战斗回合不会消耗它。探索卡使用本层有限准备额度。</li><li><strong>遇到敌群，进入卡牌战斗</strong>上下左右一格相邻会停步并显示交战预览。每场可同时面对多名敌人，各自有提前公开的行动意图。</li><li><strong>蓝量控制出牌</strong>角色攻击6、防御1，开战3蓝和4格挡。点击目标牌，再点敌人。自用或群体牌点按即释放。每轮结束、敌人行动后回复3蓝，最多3。</li><li><strong>三种防护</strong>防御减物理伤害，临时格挡吸收伤害后消耗；下回合开始格挡清空。法术护盾抵挡一次敌方技能行动及其负面效果，最多1层。中毒无视格挡。</li><li><strong>资源与成长</strong>钥匙开同色门和蓝锁宝箱。怪物、宝箱不刷新。守门人被击败后，走到楼梯登层。首次完成楼层会将固定金币存入营地。</li><li><strong>失败与存档</strong>自动保存当前骰点、坐标、手牌、随机状态与购买记录。失败清空本局资源，保留解锁、收藏和营地金币。所有进度保存在当前浏览器。</li></ol><p>物理攻击先减防御（至少1），再扣格挡（可降至0）。法术不吃物理攻击力，也不受防御减伤。普通属性增益本场有效，战意等明确标注的增益仅本回合。</p><p>键盘：按钮支持 Tab / Enter；棋盘用方向键选格；1–5 选择手牌；Esc 取消选牌或关闭弹窗。声音默认关闭。</p>${button('查看全部36种卡牌','catalog','','ghost')}`);}
+function catalogBody(){const ids=Object.keys(CARDS).filter(id=>(catalogType==='all'||CARDS[id].type===catalogType)&&(catalogCost==='all'||String(CARDS[id].cost)===catalogCost));return `<div class="catalog-filters"><label>类型 <select id="catalog-type">${[['all','全部六类'],...Object.entries(CARD_TYPES).map(([id,d])=>[id,d.name+'卡'])].map(([id,name])=>`<option value="${id}" ${catalogType===id?'selected':''}>${name}</option>`).join('')}</select></label><label>蓝耗 <select id="catalog-cost">${['all','0','1','2','3'].map(id=>`<option value="${id}" ${catalogCost===id?'selected':''}>${id==='all'?'全部':id+' 蓝'}</option>`).join('')}</select></label></div><p class="muted">${ids.length} 种 · 金色标记代表已经解锁；收藏记录获得次数。</p><div class="catalog-grid">${ids.map(id=>`<section>${cardView({id,level:0})}<p class="collection-label">${game.profile.unlocked.includes(id)?'已解锁':'营地可解锁'} · 收藏 ${game.profile.collection[id]||0}</p></section>`).join('')}</div>`;}
+function showCatalog(){showModal('命运的三十六种写法',catalogBody());}
+function showDeck(mode='display'){
+ const r=game.run;if(!r){showCatalog();return;}
+ const cards=mode==='upgrade'?r.deck.filter(c=>!c.level):mode==='recall'?r.battle.discard.map(uid=>r.deck.find(c=>c.uid===uid)).filter(c=>c.id!=='recall'):r.deck;
+ const title={display:`本局牌组 · ${r.deck.length} 张`,upgrade:'选择一张卡牌强化',remove:'选择一张卡牌移除',recall:'选择一张弃牌回到手中'}[mode];
+ const note=mode==='upgrade'?'点击卡牌确认强化。强化效果显示在下方。':mode==='remove'?`点击卡牌确认移除，支付 ${35+r.stats.removals*15} 冒险金币。`:'战斗牌抽取与弃置，探索牌在地图的探索手册里使用。';
+ showModal(title,`<p>${note}</p><div class="catalog-grid">${cards.map(c=>cardView(c,mode,r)).join('')}</div>`);
+}
+function showRelics(){showModal('本局遗物契约',`<div class="relic-list">${game.run?.relics.length?game.run.relics.map(id=>`<section>${icon(RELICS[id].icon)}<div><h3>${RELICS[id].name}</h3><p>${RELICS[id].text}</p></div></section>`).join(''):'<p>精英与首领会掉落遗物，流浪商人也会出售一件。</p>'}</div>`);}
+function perform(action){
+ if(isBusy())return;
+ const before=game.run?.phase,oldRun=game.run,path=action.type==='move'?movePath(oldRun,action.x,action.y):null;
+ const result=act(game,action);if(result.error){toast(result.error);return false;}game=result.state;save();selectedCell=null;
+ if(action.type==='new-run'){home=false;homeTab='journey';selectedEnemy=null;selectedCard=null;showDice=true;}
+ if(action.type==='roll'){
+  rolling=true;showDice=true;render();soundFx('roll');
+  setTimeout(()=>{rolling=false;showDice=false;render();},window.matchMedia('(prefers-reduced-motion: reduce)').matches?120:900);return true;
+ }
+ if(action.type==='move'&&path?.length>1&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+  const stop=path.findIndex(p=>p.x===game.run.player.x&&p.y===game.run.player.y),travel=path.slice(0,stop+1);movement={run:structuredClone(oldRun),path:travel,index:0};showDice=false;
+  const step=()=>{if(!movement)return;movement.index++;if(movement.index>=travel.length){movement=null;render();if(game.run.phase!==before)window.scrollTo({top:0,behavior:'instant'});soundFx('choose');return;}
+   const point=travel[movement.index];movement.run.player.x=point.x;movement.run.player.y=point.y;render();setTimeout(step,Math.max(45,Math.min(100,900/travel.length)));};render();setTimeout(step,60);return true;
+ }
+ selectedCard=null;if(game.run?.battle&&!aliveEnemies(game.run).some(e=>e.uid===selectedEnemy))selectedEnemy=aliveEnemies(game.run)[0]?.uid;
+ render();if(game.run?.phase!==before){window.scrollTo({top:0,behavior:'instant'});soundFx('choose');}
+ else{
+  const fx=game.run?.feedback;if(fx&&fx.serial!==oldRun?.feedback?.serial){soundFx(fx.type);const scene=app.querySelector('.battle-arena');if(scene){scene.classList.add('effect-'+fx.type);if(fx.value){const hit=document.createElement('span');hit.className='damage-float';hit.textContent='−'+fx.value;(fx.target?scene.querySelector(`[data-id="${CSS.escape(fx.target)}"]`):scene.querySelector('.hero-combatant'))?.append(hit);setTimeout(()=>hit.remove(),800);}}}
+ }
+ return true;
+}
+function startRun(){let seed;try{seed=crypto.getRandomValues(new Uint32Array(1))[0];}catch{seed=Date.now();}closeModal();perform({type:'new-run',seed});}
+function pickCell(x,y){
+ const r=game.run;if(r?.phase!=='explore'||!r.explore.rolled||isBusy())return;
+ const path=movePath(r,x,y);if(!path){toast('这个格子超出移动范围，或被墙壁、敌人、锁门阻挡。');return;}
+ selectedCell={x,y};showDice=false;render();
+}
+function onAction(element){
+ const action=element.dataset.action;if(isBusy()&&!['close','help','home','sound'].includes(action)){toast('请等当前动作结束。');return;}
+ const r=game.run;
+ switch(action){
+  case 'home':home=true;homeTab='journey';selectedCard=null;render();window.scrollTo({top:0,behavior:'instant'});break;
+  case 'camp':home=true;homeTab='camp';render();window.scrollTo({top:0,behavior:'instant'});break;
+  case 'continue':home=false;selectedCard=null;showDice=!!r?.explore.rolled;render();window.scrollTo({top:0,behavior:'instant'});break;
+  case 'start':startRun();break;
+  case 'new':if(r&&!['won','lost'].includes(r.phase))showModal('重新签订契约？',`<p>当前旅程会结束，本局资源重新开始。营地金币、解锁和收藏保留。</p><div class="center-actions">${button('开始新旅程','start','','primary')}${button('继续当前旅程','close','','ghost')}</div>`);else startRun();break;
+  case 'close':closeModal();break;
+  case 'help':showHelp();break;
+  case 'catalog':showCatalog();break;
+  case 'deck':showDeck();break;
+  case 'relics':showRelics();break;
+  case 'sound':sound=!sound;try{localStorage.setItem(SOUND_KEY,String(sound));}catch{}render();soundFx('choose');toast(sound?'声音已开启':'声音已关闭');break;
+  case 'roll':perform({type:'roll'});break;
+  case 'show-dice':showDice=true;render();break;
+  case 'hide-dice':showDice=false;render();break;
+  case 'tile':pickCell(Number(element.dataset.x),Number(element.dataset.y));break;
+  case 'move':if(selectedCell)perform({type:'move',...selectedCell});break;
+  case 'explore-menu':showModal('探索手册',explorationCards(r));break;
+  case 'explore-card':if(modal.open)closeModal();perform({type:'explore-card',id:element.dataset.id,amount});break;
+  case 'wait':case 'enter-battle':case 'retreat':case 'ascend':case 'descend':case 'interact':case 'leave':case 'end':case 'buy-relic':case 'rest-heal':perform({type:action});break;
+  case 'enemy':
+   selectedEnemy=element.dataset.id;if(selectedCard){const card=r.deck.find(c=>c.uid===selectedCard);if(CARDS[card.id].target==='enemy')perform({type:'play',uid:selectedCard,target:selectedEnemy});else render();}else render();break;
+  case 'select-card':{
+   const card=r.deck.find(c=>c.uid===element.dataset.uid),d=CARDS[card.id],check=canPlay(game,card.uid,selectedEnemy||aliveEnemies(r)[0]?.uid);
+   if(!check.ok){toast(check.reason);return;}
+   selectedCard=card.uid;
+   if(d.target==='enemy')render();else if(d.target==='discard')showDeck('recall');else perform({type:'play',uid:card.uid});break;
+  }
+  case 'cancel-card':selectedCard=null;render();break;
+  case 'basic':perform({type:'basic',target:selectedEnemy||aliveEnemies(r)[0]?.uid});break;
+  case 'reward':perform({type:'reward',id:element.dataset.id||null});break;
+  case 'unlock':perform({type:'unlock',id:element.dataset.id});break;
+  case 'buy-card':perform({type:'buy-card',index:Number(element.dataset.index)});break;
+  case 'buy-supply':perform({type:'buy-supply',kind:element.dataset.kind});break;
+  case 'upgrade-picker':showDeck('upgrade');break;
+  case 'remove-picker':showDeck('remove');break;
+  case 'upgrade-confirm':closeModal();perform({type:'upgrade',uid:element.dataset.uid});break;
+  case 'remove-confirm':closeModal();perform({type:'remove',uid:element.dataset.uid});break;
+  case 'recall-confirm':{const chosen=selectedCard;closeModal();perform({type:'play',uid:chosen,discardUid:element.dataset.uid});break;}
+  case 'potion':perform({type:'potion',kind:element.dataset.kind});break;
+  case 'pile':{const pile=element.dataset.pile;showModal({draw:'抽牌堆 · 顺序隐藏',discard:'弃牌堆',exhaust:'消耗堆 · 本场不再抽到'}[pile],`<div class="catalog-grid">${r.battle[pile].map(uid=>r.deck.find(c=>c.uid===uid)).sort((a,b)=>a.id.localeCompare(b.id)).map(c=>cardView(c,'display',r)).join('')||'<p>这里暂时没有牌。</p>'}</div>`);break;}
+ }
+}
+document.addEventListener('click',event=>{const element=event.target.closest?.('button[data-action]');if(element&&!element.disabled)onAction(element);});
+document.addEventListener('change',event=>{
+ if(event.target.id==='step-amount'){amount=Number(event.target.value);if(modal.open){modal.querySelector('.modal-body').innerHTML=explorationCards(game.run);modal.querySelector('#step-amount')?.focus();}else render();}
+ if(event.target.id==='catalog-type'||event.target.id==='catalog-cost'){
+  catalogType=modal.querySelector('#catalog-type').value;catalogCost=modal.querySelector('#catalog-cost').value;const focusedId=event.target.id;modal.querySelector('.modal-body').innerHTML=catalogBody();modal.querySelector('#'+focusedId)?.focus();
+ }
+});
+modal.addEventListener('cancel',event=>{event.preventDefault();closeModal();});
+modal.addEventListener('click',event=>{if(event.target===modal){const rect=modal.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)closeModal();}});
+document.addEventListener('keydown',event=>{
+ if(modal.open||home||isBusy()||event.ctrlKey||event.altKey||event.metaKey||event.repeat||['INPUT','SELECT','TEXTAREA'].includes(event.target.tagName))return;
+ const r=game.run;if(!r)return;
+ if(event.key==='Escape'){selectedCard=null;selectedCell=null;render();return;}
+ if(r.phase==='battle'&&/^[1-5]$/.test(event.key)){const id=r.battle.hand[Number(event.key)-1],element=id&&app.querySelector(`[data-action="select-card"][data-uid="${id}"]`);if(element){event.preventDefault();onAction(element);}}
+ if(r.phase==='explore'&&r.explore.rolled&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key)){
+  event.preventDefault();const point=selectedCell||r.player,[dx,dy]={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[event.key],x=point.x+dx,y=point.y+dy;
+  if(movePath(r,x,y)){pickCell(x,y);app.querySelector(`[data-action="tile"][data-x="${x}"][data-y="${y}"]`)?.focus({preventScroll:true});}
+ }
+});
+render();if(storageWarning)setTimeout(()=>toast('存档无法读取或保存；你仍可开始新旅程。'),400);
+
+</script>
+</body>
+</html>

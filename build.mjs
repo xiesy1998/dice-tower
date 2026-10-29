@@ -1,0 +1,12 @@
+import { readFile, writeFile, mkdir } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import path from 'node:path';
+const root=path.dirname(fileURLToPath(import.meta.url));
+const files=['cards.mjs','engine.mjs','art.mjs','app.mjs'];
+const [html,css,...modules]=await Promise.all(['template.html','style.css',...files].map(f=>readFile(path.join(root,f),'utf8')));
+const script=modules.map(code=>code.replace(/^import .*;\r?\n/gm,'').replace(/^export /gm,'')).join('\n\n').replace(/<\/script/gi,'<\\/script');
+const output=html.replace('<link rel="stylesheet" href="style.css">',`<style>\n${css}\n</style>`).replace('<script type="module" src="app.mjs"></script>',`<script type="module">\n${script}\n</script>`);
+await mkdir(path.join(root,'dist'),{recursive:true});
+await writeFile(path.join(root,'dist','index.html'),output);
+await writeFile(path.join(root,'index.html'),output);
+console.log(`Built self-contained index.html (${Buffer.byteLength(output)} bytes); zero external runtime requests.`);

@@ -1,0 +1,56 @@
+schema_version: 2
+project_id: dicebound-tower
+status: approved
+approval: user_delegated_visual_acceptance
+platform: responsive-web
+reference_sizes: [390x844, 1440x900]
+direction: portrait-first
+style: original illustrated dark-fantasy, jade stone, brass instruments, parchment cards
+colors:
+  background: '#0b1919'
+  panel: '#132b29'
+  panel_light: '#1c3b35'
+  text: '#f2ead7'
+  muted: '#a5b8aa'
+  gold: '#d8b36b'
+  damage: '#e48d79'
+  guard: '#8cbdb4'
+  poison: '#b2b479'
+  fate: '#b4a5ce'
+  card: '#e8ddc5'
+  card_text: '#263b35'
+typography:
+  body: system-ui, Microsoft YaHei, sans-serif
+  headings: Noto Serif SC, Songti SC, SimSun, serif
+  base_size_px: 15
+  minimum_body_px: 13
+geometry:
+  panel_radius_px: 18
+  card_radius_px: 12
+  touch_target_min_px: 44
+  spacing_unit_px: 8
+icons: original inline SVG, 24x24 viewbox, consistent 1.7px strokes
+illustrations: original code-native SVG tower, hero and enemy silhouettes
+states: [default, hover, focus-visible, selected, unavailable, spent, sold]
+motion:
+  dice_ms: 900
+  card_feedback_ms: 240
+  damage_feedback_ms: 280
+  respect_prefers_reduced_motion: true
+accessibility:
+  labels_in_real_html: true
+  color_is_not_only_signal: true
+  safe_area_insets: true
+  keyboard_focus_visible: true
+  audio_default: muted
+
+map:
+  grid: 9x9
+  minimum_cell_px: 44
+  overflow: contained-horizontal-scroll
+  reachable: blue-green fill plus available text
+  path: gold fill plus distance
+combat:
+  layout: hero-left, independently-targetable-enemies-right, mana-controls, bottom-hand
+  hand_overflow: contained-horizontal-scroll
+  primary_card_description_px: 13

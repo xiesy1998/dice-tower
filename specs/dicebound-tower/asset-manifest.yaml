@@ -1,0 +1,35 @@
+schema_version: 2
+project_id: dicebound-tower
+format: code-native-svg-css
+approval: user_delegated_visual_acceptance
+assets:
+  - id: interface-style
+    path: style.css
+    origin: original
+    status: implemented
+    use: colors, typography, responsive-layout, cards, dice, feedback
+  - id: tower-illustration
+    path: art.mjs
+    symbol: towerArt
+    origin: original
+    status: implemented
+    screens: [home, explore]
+  - id: character-illustrations
+    path: art.mjs
+    symbol: creature
+    origin: original
+    status: implemented
+    screens: [battle]
+  - id: interface-icons
+    path: art.mjs
+    symbol: icon
+    origin: original
+    status: implemented
+    screens: [home, camp, explore, encounter, battle, reward, shop, rest, result]
+  - id: standalone-game
+    path: index.html
+    generator: node build.mjs
+    status: built
+    external_runtime_dependencies: 0
+not_applicable: [raster-page-generation, sprite-sheet, png-slices, atlas, engine-json]
+reason: Real HTML text and code-native SVG/CSS provide the final interactive web interface.

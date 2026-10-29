@@ -1,0 +1,11 @@
+{
+  "name": "dicebound-tower",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/engine.test.mjs tests/journey.test.mjs",
+    "simulate": "node tests/simulate.mjs"
+  }
+}

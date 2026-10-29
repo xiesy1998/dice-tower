@@ -1,0 +1,62 @@
+schema_version: 2
+project_id: dicebound-tower
+status: approved
+approval: user_start_development_and_delegated_visual_acceptance
+screens:
+  - id: home
+    purpose: start or resume a journey
+    entry_points: [first-load, return-home]
+    primary_actions: [start, continue]
+    components: [tower-illustration, primary-button, progress-record]
+    states: [new-player, saved-run, finished-run]
+  - id: camp
+    purpose: buy permanent card unlock eligibility with banked gold
+    entry_points: [home, header, result]
+    primary_actions: [unlock, continue]
+    components: [unlock-offer, hand-card, player-hud]
+    states: [locked, unlocked, insufficient-gold]
+  - id: explore
+    purpose: use dice to plan a path through treasure and monster groups
+    entry_points: [new-run, reward, stairs, room-exit]
+    primary_actions: [roll, preview-path, confirm-move]
+    components: [map-grid, path-preview, die, explore-card, player-hud, relic-strip, log]
+    states: [await-click, rolling, rolled, previewing, moving, blocked, stair-sealed]
+    edge_cases: [missing-key, zero-preparation, monster-adjacency, floor-backtracking]
+  - id: encounter
+    purpose: understand every enemy that will join before combat
+    entry_points: [adjacent-group, patrol]
+    primary_actions: [enter-battle, retreat]
+    components: [enemy-portrait, primary-button]
+    states: [normal, elite, boss, multiple-groups]
+  - id: battle
+    purpose: respond to enemy intent with mana and card combinations
+    entry_points: [encounter]
+    primary_actions: [choose-card, choose-target, end-turn]
+    components: [enemy-portrait, intent-label, health-bar, status-chip, hand-card, mana-bar, turn-controls, log]
+    states: [player-turn, target-selection, invalid-action, enemy-turn, victory, defeat]
+    edge_cases: [zero-mana, dead-target, poison-victory, shield-skill, empty-hand, no-recall-target]
+  - id: reward
+    purpose: choose one card or skip after paid victory
+    entry_points: [battle-victory]
+    primary_actions: [choose-card, skip]
+    components: [reward-summary, hand-card]
+    states: [normal, elite, boss]
+  - id: shop
+    purpose: spend run gold on cards and finite supplies
+    entry_points: [merchant-tile]
+    primary_actions: [buy, manage-deck, leave]
+    components: [shop-offer, hand-card, player-hud]
+    states: [available, sold, insufficient-gold, removal-used, upgrade-used]
+  - id: rest
+    purpose: heal or upgrade once on this floor
+    entry_points: [fire-tile]
+    primary_actions: [heal, upgrade, leave]
+    components: [primary-button, hand-card]
+    states: [wounded, full-health, all-upgraded, used]
+  - id: result
+    purpose: show outcome and return to a new journey or camp
+    entry_points: [won, lost]
+    primary_actions: [new-run, camp]
+    components: [progress-record, primary-button]
+    states: [won, lost]
+overlays: [help, catalog, deck, relics, piles, upgrade, remove, recall, exploration-manual, restart-confirmation]
